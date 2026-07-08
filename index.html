@@ -3,710 +3,375 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>闆€绁炶璐︽湰</title>
+<title>éç¥è®°è´¦æ¬</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#1a1a2e;--bg2:#16213e;--card:#1e2a4a;--gold:#e2b04a;--gold-light:#f0d78c;
-  --text:#e0e0e0;--text2:#a0a0b8;--text3:#707088;
-  --red:#e74c3c;--green:#2ecc71;--blue:#3498db;
-  --border:#2a3a5c;--radius:10px;--radius-sm:6px;
-  --nav-h:56px;
-} 
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;
-  -webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;
-}
-#app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;}
-.main-view{flex:1;padding:16px 12px;padding-bottom:80px;overflow-y:auto;}
-.page{display:none;}
-.page.active{display:block;}
-
-.nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
-  background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:8px 0;color:var(--text2);cursor:pointer;font-size:12px;gap:2px;user-select:none;}
-.nav-item.active{color:var(--gold);}
-.nav-item .icon{font-size:20px;}
-
-.card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:12px;border:1px solid var(--border);}
-.card-title{font-size:15px;font-weight:600;margin-bottom:10px;color:var(--gold-light);}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border:none;
-  border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;color:#fff;white-space:nowrap;}
-.btn:active{transform:scale(.96);}
-.btn-primary{background:var(--gold);color:#1a1a2e;}
-.btn-secondary{background:#0f3460;color:var(--text);}
-.btn-danger{background:var(--red);}
-.btn-success{background:var(--green);}
-.btn-sm{padding:5px 12px;font-size:12px;border-radius:4px;}
-.btn-block{width:100%;}
-.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold);}
-.btn-group{display:flex;gap:8px;flex-wrap:wrap;}
-
-.input,.select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);
-  background:var(--bg);color:var(--text);font-size:14px;outline:none;}
-.input:focus,.select:focus{border-color:var(--gold);}
-.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
-.label{display:block;font-size:13px;color:var(--text2);margin-bottom:4px;font-weight:500;}
-.form-group{margin-bottom:12px;}
-
-.tag{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:13px;
-  background:#0f3460;color:var(--text2);gap:4px;cursor:pointer;user-select:none;margin:2px;}
-.tag.selected{background:var(--gold);color:#1a1a2e;font-weight:600;}
-.tag-grid{display:flex;flex-wrap:wrap;gap:2px;}
-
-.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}
-.badge-mj{background:rgba(226,176,74,.2);color:var(--gold);}
-.badge-ld{background:rgba(52,152,219,.2);color:var(--blue);}
-.amount-plus{color:var(--green);font-weight:600;}
-.amount-minus{color:var(--red);font-weight:600;}
-.amount-zero{color:var(--text2);}
-
-.empty-state{text-align:center;padding:40px 20px;color:var(--text3);}
-.empty-state .icon{font-size:48px;margin-bottom:12px;opacity:.4;}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
-  display:flex;align-items:flex-end;justify-content:center;}
-.modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:480px;
-  max-height:85vh;overflow-y:auto;padding:20px 16px;animation:slideUp .25s ease;}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-title{font-size:17px;font-weight:600;margin-bottom:16px;color:var(--gold-light);}
-
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;
-  padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;pointer-events:none;
-  animation:toastIn .3s ease,toastOut .3s ease 2s forwards;}
-.toast-success{background:var(--green);color:#fff;}
-.toast-error{background:var(--red);color:#fff;}
-.toast-info{background:var(--blue);color:#fff;}
-@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-@keyframes toastOut{from{opacity:1}to{opacity:0}}
-
-.row{display:flex;align-items:center;gap:8px;}
-.row-between{display:flex;align-items:center;justify-content:space-between;}
-.player-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;
-  background:linear-gradient(135deg,#0f3460,#1a4570);}
-.chip-low{color:var(--red)!important;font-weight:600;}
-.hint-text{font-size:12px;color:var(--text3);margin-top:4px;}
-.divider{height:1px;background:var(--border);margin:12px 0;}
-.summary-row{display:flex;justify-content:space-around;text-align:center;padding:16px 0;}
-.summary-item .val{font-size:24px;font-weight:700;}
-.summary-item .lbl{font-size:12px;color:var(--text2);margin-top:2px;}
-
-.banner-warn{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);
-  border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-.banner-warn span{color:var(--red);font-size:14px;font-weight:500;}
-
-.counter-row{display:flex;align-items:center;gap:6px;}
-.counter-row span.min-w{min-width:24px;text-align:center;font-size:15px;}
-
-@media(min-width:480px){.main-view{padding:20px 16px;padding-bottom:80px;}}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f0f1a;--card:#1a1a2e;--gold:#d4a843;--gold2:#f5d78c;--text:#e8e8ec;--text2:#8888a0;--red:#e74c3c;--green:#27ae60;--blue:#3498db;--border:#2a2a40;--radius:12px}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;justify-content:center;-webkit-tap-highlight-color:transparent}
+#app{width:100%;max-width:420px;min-height:100dvh;display:flex;flex-direction:column;padding:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;color:#fff;background:var(--gold)}
+.btn:active{transform:scale(.96)}
+.btn2{background:#1e1e3a;color:var(--text)}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:6px}
+.btn-red{background:var(--red)}
+.input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:15px;outline:none}
+.input:focus{border-color:var(--gold)}
+.label{font-size:13px;color:var(--text2);margin-bottom:6px;display:block}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99;padding:10px 24px;border-radius:20px;font-size:13px;font-weight:600;animation:tIn .3s,tOut .3s 2s forwards;pointer-events:none}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(-12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tOut{from{opacity:1}to{opacity:0}}
+.t-ok{background:var(--green)}.t-err{background:var(--red)}.t-info{background:var(--blue)}
+.t-center{text-align:center;padding:40px 0}
+.c-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+.c-title{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--gold2)}
+.c-small{font-size:12px;color:var(--text2)}
+.row{display:flex;align-items:center;gap:8px}.row-b{display:flex;align-items:center;justify-content:space-between}
+.gap8{gap:8px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mb8{margin-bottom:8px}
+.grid2x2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.p-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;cursor:pointer;transition:.15s;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.p-card:active{transform:scale(.97)}
+.p-card.winner{border-color:var(--gold);box-shadow:0 0 12px rgba(212,168,67,.25)}
+.p-card.empty{opacity:.45;cursor:default;border-style:dashed}
+.p-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;background:linear-gradient(135deg,#1e2a4a,#2a3a5a);margin-bottom:6px;color:#fff}
+.p-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.p-score{font-size:20px;font-weight:700}.p-score.plus{color:var(--green)}.p-score.minus{color:var(--red)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-gold{background:rgba(212,168,67,.15);color:var(--gold)}
+.badge-blue{background:rgba(52,152,219,.15);color:var(--blue)}
+.badge-red{background:rgba(231,76,60,.15);color:var(--red)}
+.badge-warn{background:rgba(231,76,60,.12);color:var(--red);padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.pay-row{display:flex;align-items:center;gap:6px;margin-top:6px;width:100%}
+.pay-row input{flex:1;min-width:0;height:30px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;text-align:center;outline:none}
+.pay-row input:focus{border-color:var(--gold)}
+.qr-box{text-align:center;padding:12px 0}
+.qr-box img{width:180px;height:180px;border-radius:8px;border:4px solid #fff;background:#fff}
+.modal-o{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:420px;max-height:80vh;overflow-y:auto;padding:20px 16px;animation:up .25s}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--gold2)}
+.divider{height:1px;background:var(--border);margin:10px 0}
+.bankrupt-banner{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.25);border-radius:var(--radius);padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="main-view">
-    <div id="page-tables" class="page active"></div>
-    <div id="page-record" class="page"></div>
-    <div id="page-history" class="page"></div>
-    <div id="page-stats" class="page"></div>
-  </div>
-  <div class="nav-bar" id="nav-bar"></div>
-  <div id="modal-container"></div>
-  <div id="toast-container"></div>
-</div>
+<div id="app"></div>
+<div id="toasts"></div>
 
 <script>
 (function(){
-// ==================== 宸ュ叿 ====================
+var SB_URL='https://apueeywuobvgrekaxowa.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwdWVleXd1b2J2Z3Jla2F4b3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0OTY0NTksImV4cCI6MjA5OTA3MjQ1OX0.b0n9J8iHgcbL_E6Ahphmy1Dr1K0NxJBdAhM4UiaP_HY';
+var POLL_MS=2500;
+
 function $(id){return document.getElementById(id)}
-function qs(sel,root){return(root||document).querySelector(sel)}
-function qsa(sel,root){return(root||document).querySelectorAll(sel)}
-function genId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,8)}
-function fmt(d){if(!d)return'';const t=new Date(d);return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`}
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.innerHTML=h;return e}
+function fmt(n){return n>=0?'+'+n:''+n}
+function fmtDate(d){var t=new Date(d);return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
+function genId(){return Math.random().toString(36).substr(2,6)+Date.now().toString(36).substr(-4)}
+function esc(s){return(String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function toast(msg,type){
-  type=type||'info';
-  const el=document.createElement('div');
-  el.className='toast toast-'+type;el.textContent=msg;
-  $('toast-container').appendChild(el);
-  setTimeout(function(){el.remove()},2500);
+function toast(msg,cls){
+  cls=cls||'t-info';var d=el('div','toast '+cls,msg);$('toasts').appendChild(d);
+  setTimeout(function(){d.remove()},2500);
 }
 
-function openModal(title,bodyHtml,onClose){
-  const overlay=document.createElement('div');overlay.className='modal-overlay';
-  const modal=document.createElement('div');modal.className='modal';
-  modal.innerHTML='<div class="modal-title">'+title+'</div>'+bodyHtml;
-  overlay.appendChild(modal);
-  $('modal-container').appendChild(overlay);
-  overlay.addEventListener('click',function(e){if(e.target===overlay){close()}});
-  function close(){overlay.remove();if(onClose)onClose()}
-  return{el:overlay,modal:modal,close:close};
+var headers={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+async function sbGet(id){
+  var r=await fetch(SB_URL+'/rest/v1/rooms?id=eq.'+encodeURIComponent(id),{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+  if(!r.ok)throw new Error('GET '+r.status);var d=await r.json();return d[0]||null
+}
+async function sbGetByCode(code){
+  var r=await fetch(SB_URL+'/rest/v1/rooms?code=eq.'+encodeURIComponent(code),{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+  if(!r.ok)throw new Error('GET '+r.status);var d=await r.json();return d[0]||null
+}
+async function sbPost(room){
+  var r=await fetch(SB_URL+'/rest/v1/rooms',{method:'POST',headers:headers,body:JSON.stringify(room)});
+  if(!r.ok)throw new Error('POST '+r.status)
+}
+async function sbPatch(id,data){
+  var r=await fetch(SB_URL+'/rest/v1/rooms?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:headers,body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('PATCH '+r.status)
 }
 
-// ==================== 鏁版嵁 ====================
-const STORAGE_KEY='mj_tables';
-const CURRENT_KEY='mj_current_table';
-const FAN_TYPES=['骞宠儭','纰扮鑳?,'娓呬竴鑹?,'娣蜂竴鑹?,'涓冨','鍗佷笁骞?,'鏉犱笂鑺?,'鏉犱笂鐐?,'鎶㈡潬鑳?,'娴峰簳鎹炴湀'];
+var myRoomId=localStorage.getItem('mj_room_id')||'';
+var myName=localStorage.getItem('mj_name')||'';
+var myRoom=null,selectedWinner=null,pollTimer=null,view='join';
 
-function loadTables(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return[]}
+function saveState(){localStorage.setItem('mj_room_id',myRoomId);localStorage.setItem('mj_name',myName)}
+function clearState(){myRoomId='';myName='';localStorage.removeItem('mj_room_id');localStorage.removeItem('mj_name')}
+
+async function pollRoom(){
+  if(!myRoomId)return;
+  try{myRoom=await sbGet(myRoomId);if(!myRoom){clearState();view='join';render()}else{render()}}catch(e){}
 }
-function saveTables(tables){localStorage.setItem(STORAGE_KEY,JSON.stringify(tables))}
-function loadTableData(id){
-  try{return JSON.parse(localStorage.getItem('mj_table_'+id)||'null')}catch(e){return null}
-}
-function saveTableData(id,data){localStorage.setItem('mj_table_'+id,JSON.stringify(data))}
+function startPoll(){stopPoll();pollTimer=setInterval(pollRoom,POLL_MS)}
+function stopPoll(){if(pollTimer){clearInterval(pollTimer);pollTimer=null}}
 
-let currentTableId=localStorage.getItem(CURRENT_KEY)||null;
-function getCurrentTable(){return currentTableId?loadTableData(currentTableId):null}
-function setCurrentTable(id){currentTableId=id;localStorage.setItem(CURRENT_KEY,id||'');renderAll();}
-
-// ==================== 娓叉煋 ====================
-let activePage='tables';
-function switchPage(page){
-  activePage=page;
-  qsa('.page').forEach(function(p){p.classList.remove('active')});
-  $('page-'+page).classList.add('active');
-  qsa('.nav-item').forEach(function(n){n.classList.remove('active')});
-  var navItem=qs('.nav-item[data-page="'+page+'"]');
-  if(navItem)navItem.classList.add('active');
-  renderPage(page);
+function render(){
+  $('app').innerHTML='';
+  if(view==='join')renderJoin();else if(view==='room')renderRoom();else if(view==='stats')renderStats();
 }
 
-function renderAll(){renderPage(activePage)}
-function renderPage(page){
-  switch(page){
-    case 'tables':renderTables();break;
-    case 'record':renderRecord();break;
-    case 'history':renderHistory();break;
-    case 'stats':renderStats();break;
-  }
+// ========== JOIN ==========
+function renderJoin(){
+  stopPoll();myRoom=null;selectedWinner=null;
+  var params=new URLSearchParams(location.search);
+  var urlCode=params.get('code')||'';
+
+  var h='<div style="text-align:center;padding:40px 0 30px;"><div style="font-size:48px;margin-bottom:8px;">ð</div>';
+  h+='<h2>éç¥è®°è´¦æ¬</h2><p class="c-small mt8">è¾å¥åå­å å¥æ¿é´ï¼èªå¨è®°è´¦</p></div>';
+  h+='<div class="c-card"><div class="label">ä½ çåå­</div>';
+  h+='<input class="input" id="join-name" placeholder="è¾å¥åå­" value="'+esc(myName||'')+'" autocomplete="off">';
+  h+='</div>';
+  h+='<div class="c-card"><div class="label">æ¿é´ç </div>';
+  h+='<input class="input" id="join-code" placeholder="è¾å¥4ä½æ¿é´ç " maxlength="4" style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-size:24px;" value="'+esc(urlCode)+'" autocomplete="off">';
+  h+='</div>';
+  h+='<button class="btn" style="width:100%;font-size:16px;padding:14px;" id="btn-join">å å¥æ¿é´</button>';
+  h+='<button class="btn btn2" style="width:100%;margin-top:8px;font-size:14px;padding:12px;" id="btn-create">åå»ºæ°æ¿é´</button>';
+  if(myRoomId)h+='<p class="c-small t-center mt8">ä½ å·²å¨æ¿é´ä¸­ <a href="#" id="btn-rejoin" style="color:var(--gold);">ç´æ¥è¿å¥</a></p>';
+  $('app').innerHTML=h;
+
+  $('btn-join').addEventListener('click',function(){doJoin(false)});
+  $('btn-create').addEventListener('click',function(){doJoin(true)});
+  var inp=$('join-code');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')doJoin(false)});
+  var rj=$('btn-rejoin');if(rj)rj.addEventListener('click',function(e){e.preventDefault();view='room';startPoll();render();pollRoom()});
 }
 
-// ==================== 瀵艰埅 ====================
-function initNav(){
-  var tabs=[
-    {key:'tables',label:'鐗屾',icon:'馃€?},
-    {key:'record',label:'璁拌处',icon:'鉁忥笍'},
-    {key:'history',label:'璁板綍',icon:'馃摐'},
-    {key:'stats',label:'缁熻',icon:'馃搳'}
-  ];
-  var html='';
-  tabs.forEach(function(t){
-    html+='<div class="nav-item'+(activePage===t.key?' active':'')+'" data-page="'+t.key+'"><span class="icon">'+t.icon+'</span><span>'+t.label+'</span></div>';
-  });
-  $('nav-bar').innerHTML=html;
-  qsa('.nav-item').forEach(function(item){
-    item.addEventListener('click',function(){switchPage(this.dataset.page)});
-  });
-}
+async function doJoin(isNew){
+  var name=$('join-name').value.trim();
+  if(!name){toast('è¯·è¾å¥åå­','t-err');return}
+  myName=name;
 
-// ==================== 鐗屾椤?====================
-function renderTables(){
-  var tables=loadTables();
-  var html='<div class="card-title" style="font-size:18px;margin-bottom:16px;">鎴戠殑鐗屾</div>';
-  if(tables.length===0){
-    html+='<div class="empty-state"><div class="icon">馃€?/div><div>杩樻病鏈夌墝妗岋紝鍒涘缓涓€涓惂</div></div>';
-  }else{
-    tables.forEach(function(id){
-      var t=loadTableData(id);
-      if(!t)return;
-      var isActive=currentTableId===id;
-      html+='<div class="card" style="cursor:pointer;'+(isActive?'border-color:var(--gold);':'')+'" data-table-id="'+id+'">';
-      html+='<div class="row-between"><div><span style="font-weight:600;">'+esc(t.name)+'</span>';
-      html+='<span class="badge '+(t.game_type==='mahjong'?'badge-mj':'badge-ld')+'" style="margin-left:8px;">'+(t.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
-      html+='<span style="font-size:12px;color:var(--text2);">'+t.members.length+'浜?/span></div>';
-      html+='<div style="font-size:12px;color:var(--text3);margin-top:6px;">'+fmt(t.created_at)+' 鍒涘缓';
-      if(isActive)html+=' <span style="color:var(--gold);">鉁撳綋鍓?/span>';
-      html+='</div></div>';
-    });
-  }
-  html+='<button class="btn btn-primary btn-block" id="btn-create-table" style="margin-top:8px;">+ 鍒涘缓鏂扮墝妗?/button>';
-  $('page-tables').innerHTML=html;
-
-  // 缁戝畾浜嬩欢
-  qsa('[data-table-id]',$('page-tables')).forEach(function(card){
-    card.addEventListener('click',function(){setCurrentTable(this.dataset.tableId)});
-  });
-  var btnCreate=$('btn-create-table');
-  if(btnCreate)btnCreate.addEventListener('click',showCreateTableModal);
-}
-
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-function showCreateTableModal(){
-  var body='<div class="form-group"><span class="label">鐗屾鍚嶇О</span><input class="input" id="new-table-name" placeholder="濡傦細鍛ㄦ湯楹诲皢灞€"></div>';
-  body+='<div class="form-group"><span class="label">娓告垙绫诲瀷</span>';
-  body+='<div class="tag-grid"><span class="tag selected" data-gt="mahjong" id="gt-mj">楹诲皢</span><span class="tag" data-gt="landlord" id="gt-ld">鏂楀湴涓?/span></div></div>';
-  body+='<div class="btn-group" style="margin-top:16px;"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-create">鍙栨秷</button><button class="btn btn-primary" style="flex:1" id="btn-confirm-create">鍒涘缓</button></div>';
-  var m=openModal('鍒涘缓鏂扮墝妗?,body);
-  var gameType='mahjong';
-  m.modal.querySelector('#gt-mj').addEventListener('click',function(){gameType='mahjong';this.classList.add('selected');m.modal.querySelector('#gt-ld').classList.remove('selected')});
-  m.modal.querySelector('#gt-ld').addEventListener('click',function(){gameType='landlord';this.classList.add('selected');m.modal.querySelector('#gt-mj').classList.remove('selected')});
-  m.modal.querySelector('#btn-cancel-create').addEventListener('click',function(){m.close()});
-  m.modal.querySelector('#btn-confirm-create').addEventListener('click',function(){
-    var name=m.modal.querySelector('#new-table-name').value.trim();
-    if(!name){toast('璇疯緭鍏ョ墝妗屽悕绉?,'error');return}
-    var id=genId();
-    var table={id:id,name:name,game_type:gameType,created_at:new Date().toISOString(),members:[],sessions:[]};
-    saveTableData(id,table);
-    var tables=loadTables();tables.unshift(id);saveTables(tables);
-    setCurrentTable(id);
-    m.close();
-    toast('鐗屾鍒涘缓鎴愬姛','success');
-  });
-}
-
-// ==================== 璁拌处椤?====================
-function renderRecord(){
-  var table=getCurrentTable();
-  if(!table){
-    $('page-record').innerHTML='<div class="empty-state"><div class="icon">馃搵</div><div>璇峰厛鍦ㄣ€岀墝妗屻€嶄腑閫夋嫨涓€寮犳</div></div>';
+  if(isNew){
+    // åå»ºæ°æ¿é´
+    try{
+      var code;var exists=true;
+      while(exists){code=genId().substr(0,4).toUpperCase();var r=await sbGetByCode(code);if(!r)exists=false}
+      var id=genId();myRoomId=id;
+      var room={id:id,code:code,status:'waiting',players:[{name:name,score:0,position:0,active:true,joined:new Date().toISOString()}],
+        session_number:1,session_data:{transactions:[]},daily_stats:{},created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+      await sbPost(room);
+      saveState();view='room';startPoll();render();
+      toast('æ¿é´ '+code+' å·²åå»º','t-ok');
+    }catch(e){toast('åå»ºå¤±è´¥','t-err');console.error(e)}
     return;
   }
-  var html='<div class="row-between" style="margin-bottom:12px;"><div><span style="font-weight:600;font-size:16px;">'+esc(table.name)+'</span>';
-  html+='<span class="badge '+(table.game_type==='mahjong'?'badge-mj':'badge-ld')+'" style="margin-left:8px;">'+(table.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
-  html+='<button class="btn btn-sm btn-secondary" id="btn-switch-table">鍒囨崲鐗屾</button></div>';
-  if(table.game_type==='mahjong')html+=renderMahjongRecord(table);
-  else html+=renderLandlordRecord(table);
-  $('page-record').innerHTML=html;
 
-  var btnSwitch=$('btn-switch-table');
-  if(btnSwitch)btnSwitch.addEventListener('click',function(){setCurrentTable(null);switchPage('tables')});
-
-  if(table.game_type==='mahjong')bindMahjongEvents(table);
-  else bindLandlordEvents(table);
+  var code=$('join-code').value.trim().toUpperCase();
+  if(!code){toast('è¯·è¾å¥æ¿é´ç ','t-err');return}
+  try{
+    var room=await sbGetByCode(code);
+    if(!room){toast('æ¿é´ç ä¸å­å¨','t-err');return}
+    var activePlayers=room.players.filter(function(p){return p.active});
+    if(activePlayers.length>=4){toast('æ¿é´å·²æ»¡','t-err');return}
+    // æ¿æ¢ç©ºä½æè¿½å 
+    var replaced=false;
+    room.players=room.players.map(function(p,idx){
+      if(!p.active&&!replaced){replaced=true;return{name:name,score:0,position:idx,active:true,joined:new Date().toISOString()}}
+      return p;
+    });
+    if(!replaced){room.players.push({name:name,score:0,position:room.players.length,active:true,joined:new Date().toISOString()})}
+    activePlayers=room.players.filter(function(p){return p.active});
+    room.status=activePlayers.length===4?'playing':'waiting';
+    room.updated_at=new Date().toISOString();
+    await sbPatch(room.id,{players:room.players,status:room.status,updated_at:room.updated_at});
+    myRoomId=room.id;saveState();view='room';startPoll();render();pollRoom();
+    history.replaceState({},'',location.pathname);
+    toast('å·²å å¥ '+code,'t-ok');
+  }catch(e){toast('å å¥å¤±è´¥','t-err');console.error(e)}
 }
 
-// ---- 楹诲皢 ----
-function renderMahjongRecord(table){
-  var activeSession=findActiveSession(table,'mahjong');
-  if(!activeSession){
-    var html='<div class="card"><div class="card-title">寮€濮嬫柊涓€灞€</div>';
-    html+='<div class="form-group"><span class="label">鍙備笌浜哄憳锛?-4浜猴級</span></div>';
-    html+='<div class="tag-grid" id="mj-player-tags">';
-    table.members.forEach(function(m){
-      html+='<span class="tag mj-player-tag" data-name="'+esc(m.name)+'">'+esc(m.name)+'</span>';
-    });
-    html+='<button class="btn btn-sm btn-secondary" id="btn-add-member-mj" style="margin:2px;">+ 娣诲姞鎴愬憳</button></div>';
-    html+='<div class="form-group" id="mj-chip-group" style="display:none;"><span class="label">姣忎汉鍒濆绛圭爜</span><input class="input" type="number" id="mj-init-chips" value="2000" style="width:140px;"></div>';
-    html+='<button class="btn btn-primary btn-block" id="btn-start-mj" disabled>寮€灞€锛堣閫夋嫨浜哄憳锛?/button>';
-    html+='<p class="hint-text">鑷冲皯閫夋嫨2浜?/p></div>';
-    return html;
+// ========== ROOM ==========
+function renderRoom(){
+  if(!myRoom){renderJoin();return}
+  var room=myRoom,activePlayers=room.players.filter(function(p){return p.active}),sData=room.session_data||{transactions:[]};
+  var isMeWinner=selectedWinner===myName;
+  var link=location.origin+location.pathname+'?code='+room.code;
+
+  var h='';
+  // é¡¶æ 
+  h+='<div class="row-b mb8"><div class="row gap8"><span style="font-size:22px;font-weight:700;letter-spacing:3px;">'+esc(room.code)+'</span>';
+  h+='<span class="badge '+(room.status==='playing'?'badge-gold':'badge-blue')+'">'+(room.status==='playing'?'æ¸¸æä¸­':'ç­å¾ä¸­')+'</span>';
+  h+='<span class="badge badge-blue">ç¬¬'+room.session_number+'å±</span></div>';
+  h+='<div class="row gap8"><button class="btn btn-sm btn2" id="btn-share">åäº«</button>';
+  h+='<button class="btn btn-sm btn2 btn-red" id="btn-leave">éåº</button></div></div>';
+
+  // ç­å¾ä¸­æ¾ç¤ºäºç»´ç 
+  if(activePlayers.length<4){
+    var remain=4-activePlayers.length;
+    h+='<div class="c-card" style="text-align:center;padding:16px;">';
+    h+='<div style="font-size:15px;font-weight:600;margin-bottom:10px;color:var(--gold2);">è¿å·® '+remain+' äººï¼å¾®ä¿¡æ«ç å å¥</div>';
+    h+='<div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(link)+'" alt="QR"></div>';
+    h+='<div class="c-small mt8">æ¿é´ç  <b style="color:var(--gold);font-size:18px;letter-spacing:3px;">'+esc(room.code)+'</b></div>';
+    h+='</div>';
   }
-  // 杩涜涓?  var chips=activeSession.chips||{};
-  var initialChips=activeSession.initial_chips||2000;
-  var hasBankrupt=Object.values(chips).some(function(v){return v<=0});
-  var html='';
-  if(hasBankrupt){
-    html+='<div class="banner-warn"><span>鏈夌帺瀹剁鐮佲墹0锛屽缓璁粨绠?/span><button class="btn btn-sm btn-danger" id="btn-settle-mj">缁撶畻</button></div>';
+
+  // ç ´äº§æç¤º
+  var bankrupts=activePlayers.filter(function(p){return(p.score||0)<=-2000});
+  if(bankrupts.length>0){
+    h+='<div class="bankrupt-banner"><span style="font-size:13px;">'+esc(bankrupts[0].name)+' ç­¹ç â¤-2000ï¼ç¹å»ç»ç®å¼æ°å±</span><button class="btn btn-sm btn-red" id="btn-new-round">æ°å±</button></div>';
   }
-  html+='<div class="card"><div class="card-title">褰撳墠绛圭爜</div>';
-  activeSession.players.forEach(function(p){
-    var c=chips[p]||initialChips;
-    html+='<div class="row-between" style="margin-bottom:6px;"><div class="row" style="gap:8px;"><div class="player-avatar" style="width:28px;height:28px;font-size:12px;">'+esc(p[0])+'</div><span>'+esc(p)+'</span></div>';
-    html+='<span class="'+(c<=0?'chip-low':'')+'" style="font-size:14px;">'+c+'</span></div>';
-  });
-  html+='<button class="btn btn-sm btn-danger" style="margin-top:8px;" id="btn-manual-settle-mj">鎵嬪姩缁撶畻</button></div>';
 
-  html+='<div class="card"><div class="card-title">璁板綍鏂颁竴灞€</div>';
-  html+='<div class="form-group"><span class="label">鑳＄墝鏂瑰紡锛堝彲閫夛級</span><select class="select" id="mj-win-type"><option value="">璺宠繃</option><option value="鑷懜">鑷懜</option><option value="鐐圭偖">鐐圭偖</option></select></div>';
-  html+='<div class="form-group" id="mj-winner-group" style="display:none;"><span class="label">鑳＄墝鑰?/span><select class="select" id="mj-winner"><option value="">璇烽€夋嫨</option>'+activeSession.players.map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('')+'</select></div>';
-  html+='<div class="form-group" id="mj-loser-group" style="display:none;"><span class="label">鐐圭偖鑰?/span><select class="select" id="mj-loser"><option value="">璇烽€夋嫨</option></select></div>';
-  html+='<div class="form-group"><span class="label">鐣瀷锛堝彲澶氶€夛紝鍙€夛級</span><div class="tag-grid" id="mj-fan-tags">'+FAN_TYPES.map(function(f){return'<span class="tag mj-fan-tag" data-fan="'+esc(f)+'">'+esc(f)+'</span>'}).join('')+'</div></div>';
-  html+='<div class="form-group"><span class="label">鏉犵墝鏄庣粏锛堝彲閫夛級</span>';
-  html+='<div style="display:flex;gap:12px;flex-wrap:wrap;">';
-  ['鏄庢潬','鏆楁潬','琛ユ潬'].forEach(function(g){
-    html+='<div class="counter-row"><span style="font-size:13px;color:var(--text2);">'+g+'</span><button class="btn btn-sm btn-secondary mj-gang-dec" data-gang="'+g+'">-</button><span class="min-w" id="mj-gang-'+g+'">0</span><button class="btn btn-sm btn-secondary mj-gang-inc" data-gang="'+g+'">+</button></div>';
-  });
-  html+='</div></div>';
-  html+='<div class="form-group"><span class="label">杈撹耽閲戦 / 绛圭爜鍙樺姩</span>';
-  activeSession.players.forEach(function(p){
-    html+='<div class="row" style="margin-bottom:4px;gap:8px;"><span style="width:50px;font-size:13px;">'+esc(p)+'</span><input class="input mj-amount-input" type="number" data-player="'+esc(p)+'" placeholder="杈撹耽閲戦" style="flex:1;height:32px;"></div>';
-  });
-  html+='</div>';
-  html+='<button class="btn btn-primary btn-block" id="btn-add-mj-round">璁板綍鏈眬</button></div>';
-  return html;
-}
-
-function findActiveSession(table,gameType){
-  if(!table||!table.sessions)return null;
-  for(var i=table.sessions.length-1;i>=0;i--){
-    if(table.sessions[i].game_type===gameType&&table.sessions[i].status==='active')return table.sessions[i];
-  }
-  return null;
-}
-
-function bindMahjongEvents(table){
-  var selectedPlayers=[];
-  function updatePlayerUI(){
-    qsa('.mj-player-tag',$('page-record')).forEach(function(tag){
-      if(selectedPlayers.indexOf(tag.dataset.name)>=0)tag.classList.add('selected');
-      else tag.classList.remove('selected');
-    });
-    var btn=$('btn-start-mj');
-    var chipGroup=$('mj-chip-group');
-    if(btn){btn.disabled=selectedPlayers.length<2;btn.textContent='寮€灞€锛?+selectedPlayers.length+'浜猴級'}
-    if(chipGroup&&selectedPlayers.length>=2)chipGroup.style.display='block';
-    else if(chipGroup)chipGroup.style.display='none';
-  }
-  qsa('.mj-player-tag',$('page-record')).forEach(function(tag){
-    tag.addEventListener('click',function(){
-      var name=this.dataset.name;
-      var idx=selectedPlayers.indexOf(name);
-      if(idx>=0)selectedPlayers.splice(idx,1);
-      else if(selectedPlayers.length<4)selectedPlayers.push(name);
-      updatePlayerUI();
-    });
-  });
-  var btnAddMember=$('btn-add-member-mj');
-  if(btnAddMember)btnAddMember.addEventListener('click',function(){showAddMemberModal(table)});
-
-  var btnStart=$('btn-start-mj');
-  if(btnStart)btnStart.addEventListener('click',function(){
-    if(selectedPlayers.length<2)return;
-    var chips={};var initChips=parseInt($('mj-init-chips').value)||2000;
-    selectedPlayers.forEach(function(p){chips[p]=initChips});
-    var session={id:genId(),game_type:'mahjong',started_at:new Date().toISOString(),status:'active',
-      players:selectedPlayers.slice(),initial_chips:initChips,chips:chips,rounds:[]};
-    table.sessions.push(session);
-    saveTableData(table.id,table);
-    renderRecord();
-    toast('楹诲皢寮€灞€锛?,'success');
-  });
-
-  // 杩涜涓殑浜嬩欢
-  var winTypeSel=$('mj-win-type');
-  if(winTypeSel)winTypeSel.addEventListener('change',function(){
-    var winnerGroup=$('mj-winner-group');
-    var loserGroup=$('mj-loser-group');
-    if(this.value){if(winnerGroup)winnerGroup.style.display='block';if(loserGroup)loserGroup.style.display=(this.value==='鐐圭偖'?'block':'none')}
-    else{if(winnerGroup)winnerGroup.style.display='none';if(loserGroup)loserGroup.style.display='none'}
-  });
-
-  var winnerSel=$('mj-winner');
-  if(winnerSel)winnerSel.addEventListener('change',function(){
-    var loserSel=$('mj-loser');if(!loserSel)return;
-    var session=findActiveSession(table,'mahjong');if(!session)return;
-    loserSel.innerHTML='<option value="">璇烽€夋嫨</option>'+session.players.filter(function(p){return p!==winnerSel.value}).map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('');
-  });
-
-  // 鏉犵墝
-  qsa('.mj-gang-inc',$('page-record')).forEach(function(btn){
-    btn.addEventListener('click',function(){var g=this.dataset.gang;var el=$('mj-gang-'+g);if(el)el.textContent=parseInt(el.textContent)+1});
-  });
-  qsa('.mj-gang-dec',$('page-record')).forEach(function(btn){
-    btn.addEventListener('click',function(){var g=this.dataset.gang;var el=$('mj-gang-'+g);if(el)el.textContent=Math.max(0,parseInt(el.textContent)-1)});
-  });
-
-  // 鐣瀷
-  var selectedFans=[];
-  qsa('.mj-fan-tag',$('page-record')).forEach(function(tag){
-    tag.addEventListener('click',function(){
-      var f=this.dataset.fan;
-      var idx=selectedFans.indexOf(f);
-      if(idx>=0)selectedFans.splice(idx,1);else selectedFans.push(f);
-      if(selectedFans.indexOf(f)>=0)this.classList.add('selected');else this.classList.remove('selected');
-    });
-  });
-
-  var btnAddRound=$('btn-add-mj-round');
-  if(btnAddRound)btnAddRound.addEventListener('click',function(){
-    var session=findActiveSession(table,'mahjong');if(!session)return;
-    var winner=($('mj-winner')||{}).value||session.players[0];
-    var loser=($('mj-loser')||{}).value||'';
-    var winType=($('mj-win-type')||{}).value||'';
-    var gangTypes={};
-    ['鏄庢潬','鏆楁潬','琛ユ潬'].forEach(function(g){var el=$('mj-gang-'+g);gangTypes[g]=el?parseInt(el.textContent):0});
-    var amounts={};
-    var hasAmount=false;
-    qsa('.mj-amount-input',$('page-record')).forEach(function(inp){
-      var v=parseInt(inp.value)||0;amounts[inp.dataset.player]=v;if(v!==0)hasAmount=true;
-    });
-    if(!hasAmount){toast('璇疯嚦灏戣緭鍏ヤ竴涓緭璧㈤噾棰?,'error');return}
-
-    // 鏇存柊绛圭爜
-    Object.keys(amounts).forEach(function(p){if(session.chips[p]===undefined)session.chips[p]=session.initial_chips});
-    Object.keys(amounts).forEach(function(p){session.chips[p]=(session.chips[p]||0)+amounts[p]});
-
-    session.rounds.push({id:genId(),winner:winner,loser:loser,win_type:winType,fan_types:selectedFans.slice(),
-      gang_types:gangTypes,amounts:amounts,created_at:new Date().toISOString()});
-    saveTableData(table.id,table);
-
-    // 妫€鏌ョ牬浜?    var bankrupt=session.players.some(function(p){return(session.chips[p]||0)<=0});
-
-    // 閲嶇疆琛ㄥ崟
-    renderRecord();
-    if(bankrupt){setTimeout(function(){showMjSettleModal(table)},300)}
-    toast('宸茶褰?+(bankrupt?' - 鏈変汉鐮翠骇锛屽缓璁粨绠?:''),bankrupt?'error':'success');
-  });
-
-  // 缁撶畻
-  var btnSettle=$('btn-settle-mj')||$('btn-manual-settle-mj');
-  if(btnSettle)btnSettle.addEventListener('click',function(){showMjSettleModal(table)});
-}
-
-function showMjSettleModal(table){
-  var session=findActiveSession(table,'mahjong');if(!session)return;
-  var chips=session.chips||{};var init=session.initial_chips||2000;
-  var body='';
-  session.players.forEach(function(p){
-    var c=chips[p]||init;var diff=c-init;
-    body+='<div class="row-between" style="margin-bottom:8px;"><span style="font-weight:500;">'+esc(p)+'</span><div><span class="'+(c<=0?'chip-low':'')+'">绛圭爜: '+c+'</span>';
-    body+='<span style="margin-left:8px;" class="'+(diff>0?'amount-plus':diff<0?'amount-minus':'amount-zero')+'">'+(diff>0?'+':'')+diff+'</span></div></div>';
-  });
-  body+='<div class="form-group" style="margin-top:12px;"><span class="label">鐜伴噾鎹㈢畻锛堝彲閫夛紝1绛圭爜=锛熷厓锛?/span><input class="input" type="number" id="mj-cash-rate" placeholder="濡?0.01" value="0" step="0.01"></div>';
-  body+='<p id="mj-cash-display" style="font-size:13px;color:var(--text2);margin-bottom:8px;"></p>';
-  body+='<div class="btn-group"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-settle">鍙栨秷</button><button class="btn btn-danger" style="flex:1" id="btn-confirm-settle">纭缁撶畻</button></div>';
-  var m=openModal('缁撶畻',body);
-
-  function updateCash(){var r=parseFloat(m.modal.querySelector('#mj-cash-rate').value)||0;var d=$('mj-cash-display');if(!d)return;var s='';if(r>0){session.players.forEach(function(p){var c=chips[p]||init;s+=esc(p)+': '+((c-init)*r).toFixed(2)+'鍏?&nbsp;';})}d.innerHTML=s}
-  m.modal.querySelector('#mj-cash-rate').addEventListener('input',updateCash);
-
-  m.modal.querySelector('#btn-cancel-settle').addEventListener('click',function(){m.close()});
-  m.modal.querySelector('#btn-confirm-settle').addEventListener('click',function(){
-    session.status='settled';session.ended_at=new Date().toISOString();
-    saveTableData(table.id,table);
-    m.close();renderRecord();
-    toast('宸茬粨绠?,'success');
-  });
-}
-
-// ---- 鏂楀湴涓?----
-function renderLandlordRecord(table){
-  var activeSession=findActiveSession(table,'landlord');
-  if(!activeSession){
-    var html='<div class="card"><div class="card-title">寮€濮嬫柊涓€灞€</div>';
-    html+='<div class="form-group"><span class="label">鍙備笌浜哄憳锛?浜猴級</span></div>';
-    html+='<div class="tag-grid" id="ld-player-tags">';
-    table.members.forEach(function(m){html+='<span class="tag ld-player-tag" data-name="'+esc(m.name)+'">'+esc(m.name)+'</span>'});
-    html+='<button class="btn btn-sm btn-secondary" id="btn-add-member-ld" style="margin:2px;">+ 娣诲姞鎴愬憳</button></div>';
-    html+='<div class="form-group"><span class="label">搴曞垎</span><input class="input" type="number" id="ld-base-score" value="1" style="width:120px;"></div>';
-    html+='<button class="btn btn-primary btn-block" id="btn-start-ld" disabled>寮€灞€锛堥渶閫?浜猴級</button></div>';
-    return html;
-  }
-  var totals=activeSession.totals||{};
-  var html='<div class="card"><div class="card-title">褰撳墠鎴樼哗锛堝叡'+(activeSession.rounds||[]).length+'灞€锛?/div>';
-  activeSession.players.forEach(function(p){
-    var a=totals[p]||0;
-    html+='<div class="row-between" style="margin-bottom:4px;"><span>'+esc(p)+'</span><span class="'+(a>0?'amount-plus':a<0?'amount-minus':'amount-zero')+'">'+(a>0?'+':'')+a+'</span></div>';
-  });
-  html+='<button class="btn btn-sm btn-danger" style="margin-top:8px;" id="btn-end-ld">缁撴潫鐗屽眬</button></div>';
-
-  html+='<div class="card"><div class="card-title">璁板綍鏂颁竴灞€</div>';
-  html+='<div class="form-group"><span class="label">鍦颁富</span><select class="select" id="ld-landlord"><option value="">璇烽€夋嫨</option>'+activeSession.players.map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('')+'</select></div>';
-  html+='<div class="form-group"><span class="label">鍙湴涓诲€嶆暟</span><div class="tag-grid" id="ld-mult-tags"><span class="tag ld-mult-tag selected" data-m="1">1鍊?/span><span class="tag ld-mult-tag" data-m="2">2鍊?/span><span class="tag ld-mult-tag" data-m="3">3鍊?/span></div></div>';
-  html+='<div class="form-group"><span class="label">鐐稿脊鏁?/span><div class="counter-row"><button class="btn btn-sm btn-secondary" id="ld-bomb-dec">-</button><span class="min-w" id="ld-bomb-count">0</span><button class="btn btn-sm btn-secondary" id="ld-bomb-inc">+</button></div></div>';
-  html+='<div class="form-group"><span class="label">鐗规畩</span><div class="tag-grid"><span class="tag" id="ld-spring">鏄ュぉ</span><span class="tag" id="ld-anti-spring">鍙嶆槬澶?/span></div></div>';
-  html+='<div class="form-group"><span class="label">鍦颁富杈撹耽</span><div class="tag-grid" id="ld-result-tags"><span class="tag" data-win="1">鍦颁富璧?/span><span class="tag" data-win="0">鍦颁富杈?/span></div></div>';
-  html+='<button class="btn btn-primary btn-block" id="btn-add-ld-round" disabled>璁板綍鏈眬锛堣閫夋嫨鍦颁富鍜岃緭璧級</button></div>';
-  return html;
-}
-
-function bindLandlordEvents(table){
-  var selectedLdPlayers=[];
-  function updateLdUI(){
-    qsa('.ld-player-tag',$('page-record')).forEach(function(t){
-      t.classList.toggle('selected',selectedLdPlayers.indexOf(t.dataset.name)>=0);
-    });
-    var btn=$('btn-start-ld');if(btn)btn.disabled=selectedLdPlayers.length!==3;
-  }
-  qsa('.ld-player-tag',$('page-record')).forEach(function(tag){
-    tag.addEventListener('click',function(){
-      var name=this.dataset.name;var idx=selectedLdPlayers.indexOf(name);
-      if(idx>=0)selectedLdPlayers.splice(idx,1);else if(selectedLdPlayers.length<3)selectedLdPlayers.push(name);
-      updateLdUI();
-    });
-  });
-  var btnAdd=$('btn-add-member-ld');if(btnAdd)btnAdd.addEventListener('click',function(){showAddMemberModal(table)});
-
-  var btnStart=$('btn-start-ld');
-  if(btnStart)btnStart.addEventListener('click',function(){
-    if(selectedLdPlayers.length!==3)return;
-    var baseScore=parseInt($('ld-base-score').value)||1;
-    var session={id:genId(),game_type:'landlord',started_at:new Date().toISOString(),status:'active',
-      players:selectedLdPlayers.slice(),base_score:baseScore,totals:{},rounds:[]};
-    selectedLdPlayers.forEach(function(p){session.totals[p]=0});
-    table.sessions.push(session);
-    saveTableData(table.id,table);
-    renderRecord();
-    toast('鏂楀湴涓诲紑灞€锛?,'success');
-  });
-
-  // 杩涜涓?  var landlord=null,landlordMult=1,landlordWin=null,bombCount=0,spring=false,antiSpring=false;
-
-  var landSel=$('ld-landlord');if(landSel)landSel.addEventListener('change',function(){landlord=this.value||null;updateLdRoundBtn()});
-  qsa('.ld-mult-tag',$('page-record')).forEach(function(t){t.addEventListener('click',function(){landlordMult=parseInt(this.dataset.m);qsa('.ld-mult-tag',$('page-record')).forEach(function(x){x.classList.remove('selected')});this.classList.add('selected')})});
-  qsa('#ld-result-tags .tag',$('page-record')).forEach(function(t){t.addEventListener('click',function(){landlordWin=this.dataset.win==='1';qsa('#ld-result-tags .tag',$('page-record')).forEach(function(x){x.classList.remove('selected')});this.classList.add('selected');updateLdRoundBtn()})});
-  var bombDec=$('ld-bomb-dec');if(bombDec)bombDec.addEventListener('click',function(){bombCount=Math.max(0,bombCount-1);$('ld-bomb-count').textContent=bombCount});
-  var bombInc=$('ld-bomb-inc');if(bombInc)bombInc.addEventListener('click',function(){bombCount++;$('ld-bomb-count').textContent=bombCount});
-  var springTag=$('ld-spring');if(springTag)springTag.addEventListener('click',function(){spring=!spring;this.classList.toggle('selected',spring)});
-  var antiSpringTag=$('ld-anti-spring');if(antiSpringTag)antiSpringTag.addEventListener('click',function(){antiSpring=!antiSpring;this.classList.toggle('selected',antiSpring)});
-
-  function updateLdRoundBtn(){var btn=$('btn-add-ld-round');if(btn)btn.disabled=!landlord||landlordWin===null}
-
-  var btnAddRound=$('btn-add-ld-round');
-  if(btnAddRound)btnAddRound.addEventListener('click',function(){
-    var session=findActiveSession(table,'landlord');if(!session||!landlord||landlordWin===null)return;
-    var baseScore=session.base_score||1;
-    var mult=(landlordMult||1)*Math.pow(2,bombCount);
-    if(spring)mult*=2;if(antiSpring)mult*=2;
-    var farmers=session.players.filter(function(p){return p!==landlord});
-    var amounts={};
-    if(landlordWin){amounts[landlord]=baseScore*mult*2;farmers.forEach(function(f){amounts[f]=-baseScore*mult})}
-    else{amounts[landlord]=-baseScore*mult*2;farmers.forEach(function(f){amounts[f]=baseScore*mult})}
-    Object.keys(amounts).forEach(function(p){session.totals[p]=(session.totals[p]||0)+amounts[p]});
-
-    session.rounds.push({id:genId(),landlord:landlord,farmers:farmers,base_score:baseScore,
-      landlord_multiplier:landlordMult,bomb_count:bombCount,spring:spring,anti_spring:antiSpring,
-      landlord_win:landlordWin,amounts:amounts,created_at:new Date().toISOString()});
-    saveTableData(table.id,table);
-
-    landlord=null;landlordMult=1;landlordWin=null;bombCount=0;spring=false;antiSpring=false;
-    renderRecord();
-    toast('宸茶褰?,'success');
-  });
-
-  var btnEnd=$('btn-end-ld');if(btnEnd)btnEnd.addEventListener('click',function(){
-    var session=findActiveSession(table,'landlord');if(!session)return;
-    session.status='settled';session.ended_at=new Date().toISOString();
-    saveTableData(table.id,table);
-    renderRecord();toast('鐗屽眬宸茬粨鏉?,'success');
-  });
-}
-
-// ---- 娣诲姞鎴愬憳 ----
-function showAddMemberModal(table){
-  var body='<div class="form-group"><span class="label">鎴愬憳鍚嶇О</span><input class="input" id="new-member-name" placeholder="杈撳叆濮撳悕鎴栨樀绉?></div>';
-  body+='<div class="btn-group" style="margin-top:12px;"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-member">鍙栨秷</button><button class="btn btn-primary" style="flex:1" id="btn-confirm-member">娣诲姞</button></div>';
-  var m=openModal('娣诲姞鎴愬憳',body);
-  m.modal.querySelector('#btn-cancel-member').addEventListener('click',function(){m.close()});
-  m.modal.querySelector('#btn-confirm-member').addEventListener('click',function(){
-    var name=m.modal.querySelector('#new-member-name').value.trim();
-    if(!name){toast('璇疯緭鍏ュ悕绉?,'error');return}
-    if(table.members.some(function(x){return x.name===name})){toast('璇ユ垚鍛樺凡瀛樺湪','error');return}
-    table.members.push({name:name});
-    saveTableData(table.id,table);
-    m.close();renderRecord();
-    toast('宸叉坊鍔? '+name,'success');
-  });
-}
-
-// ==================== 璁板綍椤?====================
-function renderHistory(){
-  var table=getCurrentTable();
-  if(!table){$('page-history').innerHTML='<div class="empty-state"><div class="icon">馃摐</div><div>璇峰厛閫夋嫨鐗屾</div></div>';return}
-  var allRounds=[];
-  (table.sessions||[]).forEach(function(s){
-    (s.rounds||[]).forEach(function(r){
-      var summary='';
-      if(s.game_type==='mahjong'){
-        summary=(r.winner||'?')+' '+(r.win_type||'鑳?);
-        if(r.fan_types&&r.fan_types.length>0)summary+=' ['+r.fan_types.join(',')+']';
-        summary+=' | ';
-        Object.keys(r.amounts||{}).forEach(function(p){var a=r.amounts[p];summary+=p+':'+(a>0?'+':'')+a+' '});
-      }else{
-        summary=r.landlord+'(鍦颁富) ';
-        Object.keys(r.amounts||{}).forEach(function(p){var a=r.amounts[p];summary+=p+':'+(a>0?'+':'')+a+' '});
-        if(r.bomb_count>0)summary+='| '+r.bomb_count+'鐐?;
-        if(r.spring)summary+='| 鏄ュぉ';
-        if(r.anti_spring)summary+='| 鍙嶆槬澶?;
+  // 2x2 ç©å®¶å¡ç
+  h+='<div class="grid2x2 mb8">';
+  for(var i=0;i<4;i++){
+    var p=room.players.find(function(x){return x.position===i});
+    if(p&&p.active){
+      var score=p.score||0,isW=selectedWinner===p.name;
+      h+='<div class="p-card'+(isW?' winner':'')+'" data-player="'+esc(p.name)+'">';
+      h+='<div class="p-avatar">'+esc(p.name[0])+'</div><div class="p-name">'+esc(p.name)+'</div>';
+      h+='<div class="p-score '+(score>0?'plus':score<0?'minus':'')+'">'+fmt(score)+'</div>';
+      if(room.status==='playing'&&selectedWinner&&!isW&&!isMeWinner){
+        h+='<div class="pay-row"><input type="number" class="pay-input" data-to="'+esc(p.name)+'" placeholder="æ¯åº" min="0" step="1" inputmode="numeric">';
+        h+='<span style="font-size:11px;color:var(--text2);white-space:nowrap;">â'+esc(selectedWinner)+'</span></div>';
       }
-      allRounds.push({date:r.created_at,summary:summary,game_type:s.game_type});
-    });
-  });
-  allRounds.sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+      h+='</div>';
+    }else{
+      h+='<div class="p-card empty"><div class="p-avatar" style="opacity:.3;">+</div><div style="font-size:13px;color:var(--text2);">ç­å¾æ«ç </div></div>';
+    }
+  }
+  h+='</div>';
 
-  var html='<div class="card-title">'+esc(table.name)+' - 璁板綍</div>';
-  if(allRounds.length===0){html+='<div class="empty-state"><div class="icon">馃摥</div><div>鏆傛棤璁板綍</div></div>'}
-  else{
-    allRounds.forEach(function(r){
-      html+='<div class="card" style="padding:10px 14px;"><div class="row-between" style="margin-bottom:4px;">';
-      html+='<span style="font-size:13px;color:var(--text2);">'+fmt(r.date)+'</span>';
-      html+='<span class="badge '+(r.game_type==='mahjong'?'badge-mj':'badge-ld')+'">'+(r.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
-      html+='<div style="font-size:13px;">'+esc(r.summary)+'</div></div>';
+  // æä½åº
+  if(room.status==='playing'&&activePlayers.length===4){
+    if(!selectedWinner){
+      h+='<div class="c-card t-center" style="padding:12px;"><span style="font-size:14px;color:var(--text2);">ç¹å»èµ¢å®¶å¤´å â å¶ä»äººè¾å¥æ¯åºéé¢</span></div>';
+    }else{
+      h+='<div class="row gap8"><button class="btn btn2" style="flex:1" id="btn-cancel">åæ¶</button><button class="btn" style="flex:1" id="btn-submit">ç¡®è®¤è®°è´¦</button></div>';
+    }
+  }
+
+  // æ¬å±è®°å½
+  if(sData.transactions&&sData.transactions.length>0){
+    h+='<div class="c-card"><div class="c-title" style="font-size:13px;">æ¬å±è®°å½</div>';
+    (sData.transactions.slice(-8).reverse()).forEach(function(t){
+      var s=t.winner+' èµ¢: '+(t.from||[]).map(function(f){return f.name+' '+f.amount}).join(', ');
+      h+='<div style="font-size:12px;color:var(--text2);padding:2px 0;">'+esc(s)+'</div>';
+    });
+    h+='</div>';
+  }
+
+  h+='<button class="btn btn2" style="width:100%;" id="btn-stats">æå¤©ç»è®¡</button>';
+  $('app').innerHTML=h;
+
+  // äºä»¶
+  $('btn-share').addEventListener('click',function(){
+    showShareModal(room.code,link);
+  });
+  $('btn-leave').addEventListener('click',leaveRoom);
+  $('btn-stats').addEventListener('click',function(){view='stats';render()});
+
+  // æ°å±æé®
+  var bn=$('btn-new-round');
+  if(bn)bn.addEventListener('click',async function(){
+    var ups=JSON.parse(JSON.stringify(room.players));
+    ups.forEach(function(p){p.score=0});
+    try{
+      await sbPatch(myRoomId,{players:ups,session_number:(room.session_number||1)+1,session_data:{transactions:[]},updated_at:new Date().toISOString()});
+      selectedWinner=null;pollRoom();
+      toast('æ°å±å¼å§ï¼','t-info');
+    }catch(e){toast('æä½å¤±è´¥','t-err')}
+  });
+
+  // ç©å®¶ç¹å»
+  if(!selectedWinner&&room.status==='playing'){
+    document.querySelectorAll('.p-card:not(.empty)').forEach(function(c){
+      c.addEventListener('click',function(){
+        var nm=this.dataset.player;
+        selectedWinner=nm;renderRoom();
+      });
     });
   }
-  $('page-history').innerHTML=html;
+
+  var bc=$('btn-cancel');if(bc)bc.addEventListener('click',function(){selectedWinner=null;renderRoom()});
+  var bs=$('btn-submit');
+  if(bs)bs.addEventListener('click',async function(){
+    var inputs=document.querySelectorAll('.pay-input'),fromList=[],total=0;
+    inputs.forEach(function(inp){var amt=parseInt(inp.value)||0;if(amt>0){fromList.push({name:inp.dataset.to,amount:amt});total+=amt}});
+    if(fromList.length===0){toast('è¯·è³å°è¾å¥ä¸ç¬','t-err');return}
+    var ups=JSON.parse(JSON.stringify(room.players));
+    ups.forEach(function(p){
+      if(p.name===selectedWinner)p.score=(p.score||0)+total;
+      var fm=fromList.find(function(f){return f.name===p.name});if(fm)p.score=(p.score||0)-fm.amount;
+    });
+    var txn={winner:selectedWinner,from:fromList,created_at:new Date().toISOString()};
+    var sd=JSON.parse(JSON.stringify(room.session_data||{transactions:[]}));sd.transactions.push(txn);
+    var today=fmtDate(new Date()),ds=room.daily_stats||{};if(!ds[today])ds[today]={};
+    ups.forEach(function(p){if(!p.active)return;var old=(room.players.find(function(x){return x.name===p.name})||{}).score||0;var diff=(p.score||0)-old;ds[today][p.name]=(ds[today][p.name]||0)+diff});
+    var pd={players:ups,session_data:sd,daily_stats:ds,updated_at:new Date().toISOString()};
+    var bankrupt=ups.some(function(p){return p.active&&(p.score||0)<=-2000});
+    if(bankrupt){pd.session_number=(room.session_number||1)+1;ups.forEach(function(p){p.score=0});pd.players=ups;pd.session_data={transactions:[]}}
+    try{await sbPatch(myRoomId,pd);selectedWinner=null;pollRoom();if(bankrupt)toast('å·²ç»ç®ï¼æ°å±å¼å§','t-info')}catch(e){toast('æäº¤å¤±è´¥','t-err')}
+  });
 }
 
-// ==================== 缁熻椤?====================
+function showShareModal(code,link){
+  var h='<div style="text-align:center;"><div class="label" style="font-size:15px;">æ¿é´ç  <b style="color:var(--gold);font-size:22px;letter-spacing:3px;">'+esc(code)+'</b></div>';
+  h+='<div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(link)+'" alt="QR"></div>';
+  h+='<p class="c-small mt8">å¾®ä¿¡æ«ä¸æ«å å¥æ¿é´</p>';
+  h+='<button class="btn btn2" style="width:100%;margin-top:10px;" id="btn-copy-link">å¤å¶éè¯·é¾æ¥</button></div>';
+  var o=el('div','modal-o');var m=el('div','modal',h);o.appendChild(m);
+  $('app').appendChild(o);
+  o.addEventListener('click',function(e){if(e.target===o)o.remove()});
+  m.querySelector('#btn-copy-link').addEventListener('click',function(){
+    navigator.clipboard.writeText(link).then(function(){toast('å·²å¤å¶é¾æ¥','t-ok')}).catch(function(){toast(link,'t-err')});
+  });
+}
+
+async function leaveRoom(){
+  if(!myRoomId||!myName){clearState();view='join';render();return}
+  try{
+    var room=await sbGet(myRoomId);if(!room){clearState();view='join';render();return}
+    room.players=room.players.map(function(p){if(p.name===myName)return{name:p.name,score:p.score,position:p.position,active:false,joined:p.joined};return p});
+    await sbPatch(myRoomId,{players:room.players,status:'waiting',updated_at:new Date().toISOString()});
+    clearState();selectedWinner=null;view='join';render();
+    toast('å·²éåº','t-info');
+  }catch(e){toast('éåºå¤±è´¥','t-err')}
+}
+
+// ========== STATS ==========
 function renderStats(){
-  var table=getCurrentTable();
-  if(!table){$('page-stats').innerHTML='<div class="empty-state"><div class="icon">馃搳</div><div>璇峰厛閫夋嫨鐗屾</div></div>';return}
-  var html='<div class="card-title">'+esc(table.name)+' - 缁熻</div>';
-  if(table.game_type==='mahjong')html+=renderMjStats(table);
-  else html+=renderLdStats(table);
-  $('page-stats').innerHTML=html;
+  if(!myRoom){renderJoin();return}
+  var room=myRoom,ds=room.daily_stats||{},dates=Object.keys(ds).sort().reverse();
+
+  var h='<div class="row-b mb8"><b style="font-size:17px;">æå¤©ç»è®¡</b><button class="btn btn-sm btn2" id="btn-back">è¿å</button></div>';
+  if(dates.length===0){h+='<div class="t-center" style="color:var(--text2);">ææ æ°æ®</div>'}
+  else{
+    dates.forEach(function(date){
+      var d=ds[date],entries=Object.entries(d).sort(function(a,b){return b[1]-a[1]}),total=entries.reduce(function(s,x){return s+x[1]},0);
+      h+='<div class="c-card"><div class="row-b mb8"><span style="font-weight:600;">'+date+'</span><span class="c-small">æ» '+fmt(total)+'</span></div>';
+      entries.forEach(function(e){h+='<div class="row-b" style="padding:3px 0;"><span>'+esc(e[0])+'</span><span style="font-weight:600;color:'+(e[1]>=0?'var(--green)':'var(--red)')+';">'+fmt(e[1])+'</span></div>'});
+      h+='</div>';
+    });
+  }
+  $('app').innerHTML=h;
+  $('btn-back').addEventListener('click',function(){view='room';render()});
 }
 
-function renderMjStats(table){
-  var playerStats={};
-  var fanStats={};
-  (table.sessions||[]).forEach(function(s){
-    if(s.game_type!=='mahjong')return;
-    (s.rounds||[]).forEach(function(r){
-      Object.keys(r.amounts||{}).forEach(function(p){
-        if(!playerStats[p])playerStats[p]={net:0,rounds:0};
-        playerStats[p].net+=(r.amounts[p]||0);playerStats[p].rounds++;
-      });
-      (r.fan_types||[]).forEach(function(f){fanStats[f]=(fanStats[f]||0)+1});
-    });
-  });
-  var html='<div class="card"><div class="summary-row">';
-  Object.keys(playerStats).forEach(function(p){
-    var s=playerStats[p];
-    html+='<div class="summary-item"><div class="val '+(s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero')+'">'+(s.net>0?'+':'')+s.net+'</div><div class="lbl">'+esc(p)+' ('+s.rounds+'灞€)</div></div>';
-  });
-  html+='</div></div>';
-  if(Object.keys(fanStats).length>0){
-    var sortedFans=Object.entries(fanStats).sort(function(a,b){return b[1]-a[1]});
-    html+='<div class="card"><div class="card-title">鐣瀷鍒嗗竷</div>';
-    var total=sortedFans.reduce(function(s,x){return s+x[1]},0);
-    sortedFans.forEach(function(e){
-      var pct=Math.round(e[1]/total*100);
-      html+='<div style="margin-bottom:6px;"><div class="row-between" style="margin-bottom:2px;"><span style="font-size:13px;">'+esc(e[0])+'</span><span style="font-size:13px;color:var(--text2);">'+e[1]+' ('+pct+'%)</span></div>';
-      html+='<div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:var(--gold);border-radius:3px;"></div></div></div>';
-    });
-    html+='</div>';
-  }else{html+='<div class="empty-state" style="padding:20px;"><div>鏆傛棤鐣瀷鏁版嵁</div></div>'}
-  return html;
+// ========== INIT ==========
+async function init(){
+  var params=new URLSearchParams(location.search),urlCode=params.get('code');
+  if(urlCode&&!myRoomId&&myName){
+    try{
+      var room=await sbGetByCode(urlCode.toUpperCase());
+      if(room){
+        var active=room.players.filter(function(p){return p.active});
+        if(active.length>=4){toast('æ¿é´å·²æ»¡','t-err');renderJoin();return}
+        var replaced=false;
+        room.players=room.players.map(function(p,idx){if(!p.active&&!replaced){replaced=true;return{name:myName,score:0,position:idx,active:true,joined:new Date().toISOString()}}return p});
+        if(!replaced)room.players.push({name:myName,score:0,position:room.players.length,active:true,joined:new Date().toISOString()});
+        active=room.players.filter(function(p){return p.active});
+        room.status=active.length===4?'playing':'waiting';
+        await sbPatch(room.id,{players:room.players,status:room.status,updated_at:new Date().toISOString()});
+        myRoomId=room.id;saveState();view='room';startPoll();render();pollRoom();
+        history.replaceState({},'',location.pathname);return;
+      }
+    }catch(e){}
+  }
+  if(myRoomId&&myName){view='room';startPoll();render();try{await pollRoom()}catch(e){}return}
+  view='join';render();
 }
-
-function renderLdStats(table){
-  var playerStats={},totalBombs=0,springs=0,antiSprings=0;
-  (table.sessions||[]).forEach(function(s){
-    if(s.game_type!=='landlord')return;
-    (s.rounds||[]).forEach(function(r){
-      totalBombs+=r.bomb_count||0;if(r.spring)springs++;if(r.anti_spring)antiSprings++;
-      Object.keys(r.amounts||{}).forEach(function(p){
-        if(!playerStats[p])playerStats[p]={net:0,rounds:0};
-        playerStats[p].net+=(r.amounts[p]||0);playerStats[p].rounds++;
-      });
-    });
-  });
-  var html='<div class="card"><div class="summary-row">';
-  Object.keys(playerStats).forEach(function(p){
-    var s=playerStats[p];
-    html+='<div class="summary-item"><div class="val '+(s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero')+'">'+(s.net>0?'+':'')+s.net+'</div><div class="lbl">'+esc(p)+' ('+s.rounds+'灞€)</div></div>';
-  });
-  html+='</div></div>';
-  html+='<div class="card"><div class="card-title">鐗屽眬缁熻</div>';
-  html+='<div class="summary-row">';
-  html+='<div class="summary-item"><div class="val" style="color:var(--gold);">'+totalBombs+'</div><div class="lbl">鎬荤偢寮规暟</div></div>';
-  html+='<div class="summary-item"><div class="val" style="color:var(--green);">'+springs+'</div><div class="lbl">鏄ュぉ</div></div>';
-  html+='<div class="summary-item"><div class="val" style="color:var(--blue);">'+antiSprings+'</div><div class="lbl">鍙嶆槬澶?/div></div>';
-  html+='</div></div>';
-  return html;
-}
-
-// ==================== 鍒濆鍖?====================
-initNav();
-renderPage('tables');
+init();
 })();
 </script>
 </body>
