@@ -3,76 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>éç¥è®°è´¦æ¬</title>
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>闆€绁炶璐︽湰</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;--card:#1e2a4a;--card-hover:#253358;
-  --gold:#e2b04a;--gold-light:#f0d78c;--text:#e0e0e0;--text2:#a0a0b8;--text3:#707088;
-  --red:#e74c3c;--green:#2ecc71;--blue:#3498db;--orange:#e67e22;
+  --bg:#1a1a2e;--bg2:#16213e;--card:#1e2a4a;--gold:#e2b04a;--gold-light:#f0d78c;
+  --text:#e0e0e0;--text2:#a0a0b8;--text3:#707088;
+  --red:#e74c3c;--green:#2ecc71;--blue:#3498db;
   --border:#2a3a5c;--radius:10px;--radius-sm:6px;
-  --nav-h:56px;--safe-bottom:env(safe-area-inset-bottom,0px);
+  --nav-h:56px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;
-  -webkit-font-smoothing:antialiased;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;
+}
 #app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;}
-.main-view{flex:1;padding:16px 12px;padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bottom));overflow-y:auto;}
+.main-view{flex:1;padding:16px 12px;padding-bottom:80px;overflow-y:auto;}
+.page{display:none;}
+.page.active{display:block;}
+
 .nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
-  background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;
-  padding-bottom:var(--safe-bottom);}
+  background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:8px 0;color:var(--text2);cursor:pointer;transition:color .2s;font-size:12px;gap:2px;
-  user-select:none;-webkit-user-select:none;}
+  padding:8px 0;color:var(--text2);cursor:pointer;font-size:12px;gap:2px;user-select:none;}
 .nav-item.active{color:var(--gold);}
-.nav-item .icon{font-size:20px;line-height:1;}
+.nav-item .icon{font-size:20px;}
+
 .card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:12px;border:1px solid var(--border);}
 .card-title{font-size:15px;font-weight:600;margin-bottom:10px;color:var(--gold-light);}
+
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border:none;
-  border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;
-  transition:all .2s;color:#fff;white-space:nowrap;user-select:none;-webkit-user-select:none;}
+  border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;color:#fff;white-space:nowrap;}
 .btn:active{transform:scale(.96);}
 .btn-primary{background:var(--gold);color:#1a1a2e;}
-.btn-primary:hover{background:var(--gold-light);}
-.btn-secondary{background:var(--bg3);color:var(--text);}
-.btn-secondary:hover{background:#1a4570;}
+.btn-secondary{background:#0f3460;color:var(--text);}
 .btn-danger{background:var(--red);}
-.btn-danger:hover{background:#c0392b;}
-.btn-success{background:var(--green);color:#fff;}
+.btn-success{background:var(--green);}
 .btn-sm{padding:5px 12px;font-size:12px;border-radius:4px;}
 .btn-block{width:100%;}
 .btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold);}
-.btn-outline:hover{background:rgba(226,176,74,.1);}
 .btn-group{display:flex;gap:8px;flex-wrap:wrap;}
+
 .input,.select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);
-  background:var(--bg);color:var(--text);font-size:14px;outline:none;transition:border-color .2s;}
+  background:var(--bg);color:var(--text);font-size:14px;outline:none;}
 .input:focus,.select:focus{border-color:var(--gold);}
-.input::placeholder{color:var(--text3);}
-.select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
 .label{display:block;font-size:13px;color:var(--text2);margin-bottom:4px;font-weight:500;}
 .form-group{margin-bottom:12px;}
-.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;
-  background:var(--bg3);color:var(--text2);gap:4px;cursor:pointer;user-select:none;}
-.tag.selected{background:var(--gold);color:#1a1a2e;}
-.tag-grid{display:flex;flex-wrap:wrap;gap:6px;}
+
+.tag{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:13px;
+  background:#0f3460;color:var(--text2);gap:4px;cursor:pointer;user-select:none;margin:2px;}
+.tag.selected{background:var(--gold);color:#1a1a2e;font-weight:600;}
+.tag-grid{display:flex;flex-wrap:wrap;gap:2px;}
+
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}
-.badge-mahjong{background:rgba(226,176,74,.2);color:var(--gold);}
-.badge-landlord{background:rgba(52,152,219,.2);color:var(--blue);}
+.badge-mj{background:rgba(226,176,74,.2);color:var(--gold);}
+.badge-ld{background:rgba(52,152,219,.2);color:var(--blue);}
 .amount-plus{color:var(--green);font-weight:600;}
 .amount-minus{color:var(--red);font-weight:600;}
 .amount-zero{color:var(--text2);}
+
 .empty-state{text-align:center;padding:40px 20px;color:var(--text3);}
 .empty-state .icon{font-size:48px;margin-bottom:12px;opacity:.4;}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
   display:flex;align-items:flex-end;justify-content:center;}
 .modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:480px;
   max-height:85vh;overflow-y:auto;padding:20px 16px;animation:slideUp .25s ease;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-title{font-size:17px;font-weight:600;margin-bottom:16px;color:var(--gold-light);}
+
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;
   padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;pointer-events:none;
   animation:toastIn .3s ease,toastOut .3s ease 2s forwards;}
@@ -81,891 +83,631 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .toast-info{background:var(--blue);color:#fff;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 @keyframes toastOut{from{opacity:1}to{opacity:0}}
-.fade-enter-active,.fade-leave-active{transition:opacity .2s}
-.fade-enter-from,.fade-leave-to{opacity:0}
-.settled-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;
-  font-size:11px;background:rgba(46,204,113,.15);color:var(--green);}
-.active-chip{background:rgba(231,76,60,.15);color:var(--red);}
-.chart-wrap{position:relative;width:100%;max-height:260px;margin:12px 0;}
-.chart-wrap canvas{width:100%!important;}
-.divider{height:1px;background:var(--border);margin:12px 0;}
+
 .row{display:flex;align-items:center;gap:8px;}
 .row-between{display:flex;align-items:center;justify-content:space-between;}
 .player-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
   justify-content:center;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;
-  background:linear-gradient(135deg,var(--bg3),#1a4570);}
-.player-name{font-size:14px;font-weight:500;}
-.chip-count{font-size:13px;color:var(--text2);}
+  background:linear-gradient(135deg,#0f3460,#1a4570);}
 .chip-low{color:var(--red)!important;font-weight:600;}
-.init-panel{background:var(--card);border:2px solid var(--gold);border-radius:var(--radius);padding:20px;margin:20px 12px;}
-.init-panel h3{color:var(--gold);margin-bottom:12px;}
-.init-panel pre{background:var(--bg);padding:12px;border-radius:var(--radius-sm);overflow-x:auto;
-  font-size:11px;line-height:1.5;color:var(--text2);max-height:300px;overflow-y:auto;
-  white-space:pre-wrap;word-break:break-all;}
-.copy-btn{margin-top:8px;}
-.spin{animation:spin 1s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading{text-align:center;padding:60px 20px;color:var(--text2);}
-.loading .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);
-  border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
+.hint-text{font-size:12px;color:var(--text3);margin-top:4px;}
+.divider{height:1px;background:var(--border);margin:12px 0;}
 .summary-row{display:flex;justify-content:space-around;text-align:center;padding:16px 0;}
 .summary-item .val{font-size:24px;font-weight:700;}
 .summary-item .lbl{font-size:12px;color:var(--text2);margin-top:2px;}
-.hint-text{font-size:12px;color:var(--text3);margin-top:4px;}
-.end-session-banner{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);
+
+.banner-warn{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);
   border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-.end-session-banner span{color:var(--red);font-size:14px;font-weight:500;}
-@media(min-width:480px){.main-view{padding:20px 16px;padding-bottom:calc(var(--nav-h) + 24px)}}
+.banner-warn span{color:var(--red);font-size:14px;font-weight:500;}
+
+.counter-row{display:flex;align-items:center;gap:6px;}
+.counter-row span.min-w{min-width:24px;text-align:center;font-size:15px;}
+
+@media(min-width:480px){.main-view{padding:20px 16px;padding-bottom:80px;}}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="loading" v-if="loading"><div class="spinner"></div><div>å è½½ä¸­...</div></div>
-
-  <div v-if="showInitPanel" class="init-panel">
-    <h3>æ°æ®åºåå§å</h3>
-    <p style="color:var(--text2);margin-bottom:12px;font-size:13px;">æ£æµå°æ°æ®åºè¡¨å°æªåå»ºãè¯·å¤å¶ä»¥ä¸SQLå° <a :href="supabaseSqlEditorUrl" target="_blank" style="color:var(--gold);">Supabase SQL Editor</a> ä¸­æ§è¡ï¼</p>
-    <pre>{{ initSQL }}</pre>
-    <button class="btn btn-primary copy-btn" @click="copySQL" style="margin-top:10px;width:100%;">{{copyBtnText}}</button>
-    <button class="btn btn-outline" @click="retryInit" style="margin-top:8px;width:100%;">éæ°æ£æµ</button>
+  <div class="main-view">
+    <div id="page-tables" class="page active"></div>
+    <div id="page-record" class="page"></div>
+    <div id="page-history" class="page"></div>
+    <div id="page-stats" class="page"></div>
   </div>
-
-  <template v-if="!loading && !showInitPanel">
-    <div class="main-view">
-      <!-- çæ¡è§å¾ -->
-      <div v-if="currentTab==='tables'">
-        <div class="card-title" style="font-size:18px;margin-bottom:16px;">æççæ¡</div>
-        <div v-if="tables.length===0" class="empty-state">
-          <div class="icon">ð</div>
-          <div>è¿æ²¡æçæ¡ï¼åå»ºä¸ä¸ªå§</div>
-        </div>
-        <div v-for="t in tables" :key="t.id" class="card" style="cursor:pointer" @click="selectTable(t)">
-          <div class="row-between">
-            <div>
-              <span style="font-weight:600;">{{t.name}}</span>
-              <span :class="t.game_type==='mahjong'?'badge badge-mahjong':'badge badge-landlord'" style="margin-left:8px;">{{t.game_type==='mahjong'?'éº»å°':'æå°ä¸»'}}</span>
-            </div>
-            <span style="font-size:12px;color:var(--text2);">éè¯·ç : {{t.invite_code}}</span>
-          </div>
-          <div style="font-size:12px;color:var(--text3);margin-top:6px;">{{formatTime(t.created_at)}} åå»º</div>
-        </div>
-        <button class="btn btn-primary btn-block" @click="showCreateTable=true" style="margin-top:8px;">+ åå»ºæ°çæ¡</button>
-
-        <div class="divider"></div>
-        <div class="card-title">å å¥çæ¡</div>
-        <div class="row" style="gap:8px;">
-          <input class="input" v-model="joinCode" placeholder="è¾å¥éè¯·ç " style="flex:1">
-          <button class="btn btn-secondary" @click="joinTable" :disabled="!joinCode.trim()">å å¥</button>
-        </div>
-      </div>
-
-      <!-- è®°è´¦è§å¾ -->
-      <div v-if="currentTab==='record'">
-        <div v-if="!currentTable" class="empty-state">
-          <div class="icon">ð</div>
-          <div>è¯·åå¨ãçæ¡ãä¸­éæ©ä¸å¼ æ¡</div>
-        </div>
-        <template v-else>
-          <div class="row-between" style="margin-bottom:12px;">
-            <div><span style="font-weight:600;font-size:16px;">{{currentTable.name}}</span>
-              <span :class="currentTable.game_type==='mahjong'?'badge badge-mahjong':'badge badge-landlord'" style="margin-left:8px;">{{currentTable.game_type==='mahjong'?'éº»å°':'æå°ä¸»'}}</span></div>
-            <button class="btn btn-sm btn-secondary" @click="currentTable=null">åæ¢</button>
-          </div>
-
-          <!-- éº»å°è®°è´¦ -->
-          <template v-if="currentTable.game_type==='mahjong'">
-            <!-- æªå¼å± -->
-            <div v-if="!mjSession" class="card">
-              <div class="card-title">å¼å§æ°ä¸å±</div>
-              <div class="form-group"><span class="label">åä¸äººå</span></div>
-              <div class="tag-grid" style="margin-bottom:10px;">
-                <span v-for="m in tableMembers" :key="m.id" :class="['tag',mjPlayers.includes(m.player_name)?'selected':'']"
-                  @click="toggleMjPlayer(m.player_name)">{{m.player_name}}</span>
-                <button class="btn btn-sm btn-secondary" @click="showAddMember=true">+ æ·»å æå</button>
-              </div>
-              <div class="form-group" v-if="mjPlayers.length>=2">
-                <span class="label">æ¯äººåå§ç­¹ç </span>
-                <input class="input" type="number" v-model.number="mjInitialChips" placeholder="2000" style="width:140px;">
-              </div>
-              <button class="btn btn-primary btn-block" :disabled="mjPlayers.length<2" @click="startMjSession">å¼å±ï¼{{mjPlayers.length}}äººï¼</button>
-              <p class="hint-text" v-if="mjPlayers.length<2">è³å°éæ©2äºº</p>
-            </div>
-
-            <!-- å·²å¼å± -->
-            <div v-if="mjSession">
-              <div class="end-session-banner" v-if="hasMjBankrupt">
-                <span>æç©å®¶ç­¹ç â¤0ï¼å»ºè®®ç»ç®</span>
-                <button class="btn btn-sm btn-danger" @click="showMjSettle=true">ç»ç®</button>
-              </div>
-              <div class="card">
-                <div class="card-title">å½åç­¹ç </div>
-                <div v-for="(chips,name) in mjChips" :key="name" class="row-between" style="margin-bottom:6px;">
-                  <div class="row" style="gap:8px;"><div class="player-avatar" style="width:28px;height:28px;font-size:12px;">{{name[0]}}</div><span>{{name}}</span></div>
-                  <span class="chip-count" :class="chips<=0?'chip-low':''">{{chips}}</span>
-                </div>
-                <button class="btn btn-sm btn-danger" style="margin-top:8px;" @click="showMjSettle=true">æå¨ç»ç®</button>
-              </div>
-
-              <div class="card">
-                <div class="card-title">è®°å½æ°ä¸å±</div>
-                <div class="form-group"><span class="label">è¡çæ¹å¼</span>
-                  <select class="select" v-model="mjRound.win_type"><option value="">è·³è¿</option><option value="èªæ¸">èªæ¸</option><option value="ç¹ç®">ç¹ç®</option></select></div>
-                <div class="form-group" v-if="mjRound.win_type"><span class="label">è¡çè</span>
-                  <select class="select" v-model="mjRound.winner"><option value="">è¯·éæ©</option><option v-for="p in mjPlayers" :key="p" :value="p">{{p}}</option></select></div>
-                <div class="form-group" v-if="mjRound.win_type==='ç¹ç®'"><span class="label">ç¹ç®è</span>
-                  <select class="select" v-model="mjRound.loser"><option value="">è¯·éæ©</option><option v-for="p in mjPlayers.filter(x=>x!==mjRound.winner)" :key="p" :value="p">{{p}}</option></select></div>
-                <div class="form-group"><span class="label">çªåï¼å¯å¤éï¼</span>
-                  <div class="tag-grid">
-                    <span v-for="f in fanTypes" :key="f" :class="['tag',mjRound.fan_types.includes(f)?'selected':'']" @click="toggleFanType(f)">{{f}}</span>
-                  </div></div>
-                <div class="form-group"><span class="label">æ çæç»</span>
-                  <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <div class="row" style="gap:4px;"><span style="font-size:13px;color:var(--text2);">ææ </span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.ææ =Math.max(0,mjRound.gang_types.ææ -1)">-</button><span style="min-width:20px;text-align:center;">{{mjRound.gang_types.ææ }}</span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.ææ ++">+</button></div>
-                    <div class="row" style="gap:4px;"><span style="font-size:13px;color:var(--text2);">ææ </span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.ææ =Math.max(0,mjRound.gang_types.ææ -1)">-</button><span style="min-width:20px;text-align:center;">{{mjRound.gang_types.ææ }}</span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.ææ ++">+</button></div>
-                    <div class="row" style="gap:4px;"><span style="font-size:13px;color:var(--text2);">è¡¥æ </span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.è¡¥æ =Math.max(0,mjRound.gang_types.è¡¥æ -1)">-</button><span style="min-width:20px;text-align:center;">{{mjRound.gang_types.è¡¥æ }}</span><button class="btn btn-sm btn-secondary" @click="mjRound.gang_types.è¡¥æ ++">+</button></div>
-                  </div></div>
-                <div class="form-group"><span class="label">è¾èµ¢éé¢ / ç­¹ç åå¨</span>
-                  <div v-for="p in mjPlayers" :key="p" class="row" style="margin-bottom:4px;gap:8px;">
-                    <span style="width:50px;font-size:13px;">{{p}}</span>
-                    <input class="input" type="number" v-model.number="mjRoundAmounts[p]" :placeholder="p===''+mjRound.winner?'èµ¢å¤å°':'è¾å¤å°'" style="flex:1;height:32px;">
-                  </div></div>
-                <button class="btn btn-primary btn-block" @click="addMjRound">è®°å½æ¬å±</button>
-              </div>
-            </div>
-          </template>
-
-          <!-- æå°ä¸»è®°è´¦ -->
-          <template v-if="currentTable.game_type==='landlord'">
-            <div v-if="!ldSession" class="card">
-              <div class="card-title">å¼å§æ°ä¸å±</div>
-              <div class="form-group"><span class="label">åä¸äººåï¼3äººï¼</span></div>
-              <div class="tag-grid" style="margin-bottom:10px;">
-                <span v-for="m in tableMembers" :key="m.id" :class="['tag',ldPlayers.includes(m.player_name)?'selected':'']"
-                  @click="toggleLdPlayer(m.player_name)">{{m.player_name}}</span>
-                <button class="btn btn-sm btn-secondary" @click="showAddMember=true">+ æ·»å æå</button>
-              </div>
-              <div class="form-group"><span class="label">åºå</span><input class="input" type="number" v-model.number="ldBaseScore" placeholder="1" style="width:120px;"></div>
-              <button class="btn btn-primary btn-block" :disabled="ldPlayers.length!==3" @click="startLdSession">å¼å±</button>
-              <p class="hint-text" v-if="ldPlayers.length!==3">éæ°å¥½3äºº</p>
-            </div>
-
-            <div v-if="ldSession">
-              <div class="card">
-                <div class="card-title">å½åæç»©ï¼å±{{ldRounds.length}}å±ï¼</div>
-                <div v-for="(amt,name) in ldTotals" :key="name" class="row-between" style="margin-bottom:4px;">
-                  <span>{{name}}</span><span :class="amt>0?'amount-plus':amt<0?'amount-minus':'amount-zero'">{{amt>0?'+':''}}{{amt}}</span>
-                </div>
-                <button class="btn btn-sm btn-danger" style="margin-top:8px;" @click="endLdSession">ç»æçå±</button>
-              </div>
-
-              <div class="card">
-                <div class="card-title">è®°å½æ°ä¸å±</div>
-                <div class="form-group"><span class="label">å°ä¸»</span>
-                  <select class="select" v-model="ldRound.landlord"><option value="">è¯·éæ©</option><option v-for="p in ldPlayers" :key="p" :value="p">{{p}}</option></select></div>
-                <div class="form-group"><span class="label">å«å°ä¸»åæ°</span>
-                  <div class="tag-grid">
-                    <span v-for="m in [1,2,3]" :key="m" :class="['tag',ldRound.landlord_multiplier===m?'selected':'']" @click="ldRound.landlord_multiplier=m">{{m}}å</span>
-                  </div></div>
-                <div class="form-group"><span class="label">ç¸å¼¹æ°</span>
-                  <div class="row" style="gap:6px;">
-                    <button class="btn btn-sm btn-secondary" @click="ldRound.bomb_count=Math.max(0,ldRound.bomb_count-1)">-</button>
-                    <span style="min-width:30px;text-align:center;font-size:16px;">{{ldRound.bomb_count}}</span>
-                    <button class="btn btn-sm btn-secondary" @click="ldRound.bomb_count++">+</button>
-                  </div></div>
-                <div class="form-group"><span class="label">ç¹æ®</span>
-                  <div class="tag-grid">
-                    <span :class="['tag',ldRound.spring?'selected':'']" @click="ldRound.spring=!ldRound.spring">æ¥å¤©</span>
-                    <span :class="['tag',ldRound.anti_spring?'selected':'']" @click="ldRound.anti_spring=!ldRound.anti_spring">åæ¥å¤©</span>
-                  </div></div>
-                <div class="form-group"><span class="label">å°ä¸»è¾èµ¢</span>
-                  <div class="tag-grid">
-                    <span :class="['tag',ldRound.landlord_win===true?'selected':'']" @click="ldRound.landlord_win=true">å°ä¸»èµ¢</span>
-                    <span :class="['tag',ldRound.landlord_win===false?'selected':'']" @click="ldRound.landlord_win=false">å°ä¸»è¾</span>
-                  </div></div>
-                <button class="btn btn-primary btn-block" @click="addLdRound" :disabled="!ldRound.landlord||ldRound.landlord_win===null">è®°å½æ¬å±</button>
-              </div>
-            </div>
-          </template>
-        </template>
-      </div>
-
-      <!-- è®°å½è§å¾ -->
-      <div v-if="currentTab==='history'">
-        <div v-if="!currentTable" class="empty-state"><div class="icon">ð</div><div>è¯·åéæ©çæ¡</div></div>
-        <template v-else>
-          <div class="card-title">{{currentTable.name}} - è®°å½</div>
-          <div v-if="!historyLoaded" class="loading"><div class="spinner" style="width:24px;height:24px;"></div><div>å è½½ä¸­</div></div>
-          <div v-if="historyLoaded && historyRounds.length===0" class="empty-state"><div class="icon">ð­</div><div>ææ è®°å½</div></div>
-          <div v-for="r in historyRounds" :key="r._key" class="card" style="padding:10px 14px;">
-            <div class="row-between" style="margin-bottom:4px;">
-              <span style="font-size:13px;color:var(--text2);">{{formatTime(r.created_at)}}</span>
-              <span class="badge" :class="r.game_type==='mahjong'?'badge-mahjong':'badge-landlord'">{{r.game_type==='mahjong'?'éº»å°':'æå°ä¸»'}}</span>
-            </div>
-            <div style="font-size:13px;">{{r._summary}}</div>
-          </div>
-        </template>
-      </div>
-
-      <!-- ç»è®¡è§å¾ -->
-      <div v-if="currentTab==='stats'">
-        <div v-if="!currentTable" class="empty-state"><div class="icon">ð</div><div>è¯·åéæ©çæ¡</div></div>
-        <template v-else>
-          <div class="card-title">{{currentTable.name}} - ç»è®¡</div>
-          <div v-if="!statsLoaded" class="loading"><div class="spinner" style="width:24px;height:24px;"></div><div>å è½½ä¸­</div></div>
-          <template v-if="statsLoaded">
-            <div class="card" v-if="currentTable.game_type==='mahjong'">
-              <div class="summary-row">
-                <div class="summary-item" v-for="s in mjStats.players" :key="s.name">
-                  <div class="val" :class="s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero'">{{s.net>0?'+':''}}{{s.net}}</div>
-                  <div class="lbl">{{s.name}} ({{s.rounds}}å±)</div>
-                </div>
-              </div>
-              <div class="chart-wrap" v-if="mjStats.trendLabels.length>1"><canvas id="trendChart"></canvas></div>
-              <div class="chart-wrap" v-if="mjStats.fanLabels.length>0"><canvas id="fanChart"></canvas></div>
-            </div>
-            <div class="card" v-if="currentTable.game_type==='landlord'">
-              <div class="summary-row">
-                <div class="summary-item" v-for="s in ldStats.players" :key="s.name">
-                  <div class="val" :class="s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero'">{{s.net>0?'+':''}}{{s.net}}</div>
-                  <div class="lbl">{{s.name}} ({{s.rounds}}å±)</div>
-                </div>
-              </div>
-              <div style="font-size:14px;margin-top:8px;color:var(--text2);">æ»ç¸å¼¹æ°ï¼{{ldStats.totalBombs}} | æ¥å¤©ï¼{{ldStats.springs}}æ¬¡ | åæ¥å¤©ï¼{{ldStats.antiSprings}}æ¬¡</div>
-              <div class="chart-wrap" v-if="ldStats.trendLabels.length>1"><canvas id="ldTrendChart"></canvas></div>
-            </div>
-          </template>
-        </template>
-      </div>
-    </div>
-
-    <!-- åºé¨å¯¼èª -->
-    <div class="nav-bar">
-      <div v-for="tab in tabs" :key="tab.key" class="nav-item" :class="{active:currentTab===tab.key}" @click="switchTab(tab.key)">
-        <span class="icon">{{tab.icon}}</span><span>{{tab.label}}</span>
-      </div>
-    </div>
-
-    <!-- åå»ºçæ¡å¼¹çª -->
-    <div class="modal-overlay" v-if="showCreateTable" @click.self="showCreateTable=false">
-      <div class="modal">
-        <div class="modal-title">åå»ºæ°çæ¡</div>
-        <div class="form-group"><span class="label">çæ¡åç§°</span><input class="input" v-model="newTable.name" placeholder="å¦ï¼å¨æ«éº»å°å±"></div>
-        <div class="form-group"><span class="label">æ¸¸æç±»å</span>
-          <div class="tag-grid">
-            <span :class="['tag',newTable.game_type==='mahjong'?'selected':'']" @click="newTable.game_type='mahjong'">éº»å°</span>
-            <span :class="['tag',newTable.game_type==='landlord'?'selected':'']" @click="newTable.game_type='landlord'">æå°ä¸»</span>
-          </div></div>
-        <div class="btn-group" style="margin-top:16px;">
-          <button class="btn btn-secondary" style="flex:1" @click="showCreateTable=false">åæ¶</button>
-          <button class="btn btn-primary" style="flex:1" @click="createTable" :disabled="!newTable.name.trim()">åå»º</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- æ·»å æåå¼¹çª -->
-    <div class="modal-overlay" v-if="showAddMember" @click.self="showAddMember=false">
-      <div class="modal">
-        <div class="modal-title">æ·»å æå</div>
-        <div class="form-group"><span class="label">æååç§°</span><input class="input" v-model="newMemberName" placeholder="è¾å¥å§å"></div>
-        <div class="btn-group" style="margin-top:12px;">
-          <button class="btn btn-secondary" style="flex:1" @click="showAddMember=false">åæ¶</button>
-          <button class="btn btn-primary" style="flex:1" @click="addMember" :disabled="!newMemberName.trim()">æ·»å </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- éº»å°ç»ç®å¼¹çª -->
-    <div class="modal-overlay" v-if="showMjSettle" @click.self="showMjSettle=false">
-      <div class="modal">
-        <div class="modal-title">ç»ç®</div>
-        <div v-for="(chips,name) in mjChips" :key="name" class="row-between" style="margin-bottom:8px;">
-          <span style="font-weight:500;">{{name}}</span>
-          <div>
-            <span class="chip-count" :class="chips<=0?'chip-low':''">ç­¹ç : {{chips}}</span>
-            <span style="margin-left:8px;" :class="(chips-mjInitialChips)>0?'amount-plus':(chips-mjInitialChips)<0?'amount-minus':'amount-zero'">
-              {{(chips-mjInitialChips)>0?'+':''}}{{chips-mjInitialChips}}
-            </span>
-          </div>
-        </div>
-        <div class="form-group" style="margin-top:12px;"><span class="label">ç°éæ¢ç®ï¼å¯éï¼</span><input class="input" v-model.number="mjCashRate" type="number" placeholder="å¦ 1ç­¹ç =0.01å å¡«0.01"></div>
-        <p v-if="mjCashRate>0" style="font-size:13px;color:var(--text2);margin-bottom:8px;">
-          <span v-for="(chips,name) in mjChips" :key="name">{{name}}: {{((chips-mjInitialChips)*mjCashRate).toFixed(2)}}å &nbsp;</span>
-        </p>
-        <div class="btn-group">
-          <button class="btn btn-secondary" style="flex:1" @click="showMjSettle=false">åæ¶</button>
-          <button class="btn btn-danger" style="flex:1" @click="settleMjSession">ç¡®è®¤ç»ç®</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toast -->
-    <div v-if="toast.show" :class="['toast','toast-'+toast.type]">{{toast.msg}}</div>
-  </template>
+  <div class="nav-bar" id="nav-bar"></div>
+  <div id="modal-container"></div>
+  <div id="toast-container"></div>
 </div>
 
 <script>
-const SUPABASE_URL='https://gwzqngcpibjyrqjhegjl.supabase.co'
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3enFuZ2NwaWJqeXJxamhlZ2psIiwicm9sZSI6ImFub24iLCJrZXkiOiJkY2ZhOTFhYWVjZjgwMjk4NjNjMjkzZTc3OGRhNGQyNzI0ZTg2ODQ4OTRhMTJhYjQ4YzgxNGI0Mzg3ODU4NzJiLCJpYXQiOjE3NTE2NTUyNTAsImV4cCI6MjA2NzIzMTI1MH0.77ri8nYhNSdaMV4tlSznAHb1Fz5F_v3O1DqO6dY0sqI'
+(function(){
+// ==================== 宸ュ叿 ====================
+function $(id){return document.getElementById(id)}
+function qs(sel,root){return(root||document).querySelector(sel)}
+function qsa(sel,root){return(root||document).querySelectorAll(sel)}
+function genId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,8)}
+function fmt(d){if(!d)return'';const t=new Date(d);return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`}
 
-const INIT_SQL=`-- çæ¡è¡¨
-CREATE TABLE IF NOT EXISTS tables (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  game_type TEXT NOT NULL CHECK(game_type IN ('mahjong','landlord')),
-  invite_code TEXT UNIQUE NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  created_by UUID
-);
+function toast(msg,type){
+  type=type||'info';
+  const el=document.createElement('div');
+  el.className='toast toast-'+type;el.textContent=msg;
+  $('toast-container').appendChild(el);
+  setTimeout(function(){el.remove()},2500);
+}
 
--- æ¡æåè¡¨
-CREATE TABLE IF NOT EXISTS table_members (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  table_id UUID REFERENCES tables(id) ON DELETE CASCADE,
-  player_name TEXT NOT NULL,
-  user_id UUID,
-  joined_at TIMESTAMPTZ DEFAULT NOW()
-);
+function openModal(title,bodyHtml,onClose){
+  const overlay=document.createElement('div');overlay.className='modal-overlay';
+  const modal=document.createElement('div');modal.className='modal';
+  modal.innerHTML='<div class="modal-title">'+title+'</div>'+bodyHtml;
+  overlay.appendChild(modal);
+  $('modal-container').appendChild(overlay);
+  overlay.addEventListener('click',function(e){if(e.target===overlay){close()}});
+  function close(){overlay.remove();if(onClose)onClose()}
+  return{el:overlay,modal:modal,close:close};
+}
 
--- å¼å±è¡¨
-CREATE TABLE IF NOT EXISTS game_sessions (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  table_id UUID REFERENCES tables(id) ON DELETE CASCADE,
-  game_type TEXT NOT NULL,
-  started_at TIMESTAMPTZ DEFAULT NOW(),
-  ended_at TIMESTAMPTZ,
-  status TEXT DEFAULT 'active' CHECK(status IN ('active','settled')),
-  players_json JSONB
-);
+// ==================== 鏁版嵁 ====================
+const STORAGE_KEY='mj_tables';
+const CURRENT_KEY='mj_current_table';
+const FAN_TYPES=['骞宠儭','纰扮鑳?,'娓呬竴鑹?,'娣蜂竴鑹?,'涓冨','鍗佷笁骞?,'鏉犱笂鑺?,'鏉犱笂鐐?,'鎶㈡潬鑳?,'娴峰簳鎹炴湀'];
 
--- éº»å°å±è®°å½
-CREATE TABLE IF NOT EXISTS mahjong_rounds (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  session_id UUID REFERENCES game_sessions(id) ON DELETE CASCADE,
-  winner TEXT,
-  loser TEXT,
-  win_type TEXT,
-  fan_types_json JSONB DEFAULT '[]',
-  gang_types_json JSONB DEFAULT '{}',
-  amount NUMERIC DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+function loadTables(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return[]}
+}
+function saveTables(tables){localStorage.setItem(STORAGE_KEY,JSON.stringify(tables))}
+function loadTableData(id){
+  try{return JSON.parse(localStorage.getItem('mj_table_'+id)||'null')}catch(e){return null}
+}
+function saveTableData(id,data){localStorage.setItem('mj_table_'+id,JSON.stringify(data))}
 
--- æå°ä¸»å±è®°å½
-CREATE TABLE IF NOT EXISTS landlord_rounds (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  session_id UUID REFERENCES game_sessions(id) ON DELETE CASCADE,
-  landlord TEXT,
-  farmers_json JSONB DEFAULT '[]',
-  base_score INTEGER DEFAULT 1,
-  landlord_multiplier INTEGER DEFAULT 1,
-  bomb_count INTEGER DEFAULT 0,
-  spring BOOLEAN DEFAULT FALSE,
-  result_json JSONB DEFAULT '{}',
-  amount_json JSONB DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+let currentTableId=localStorage.getItem(CURRENT_KEY)||null;
+function getCurrentTable(){return currentTableId?loadTableData(currentTableId):null}
+function setCurrentTable(id){currentTableId=id;localStorage.setItem(CURRENT_KEY,id||'');renderAll();}
 
--- ç´¢å¼
-CREATE INDEX IF NOT EXISTS idx_tables_invite ON tables(invite_code);
-CREATE INDEX IF NOT EXISTS idx_members_table ON table_members(table_id);
-CREATE INDEX IF NOT EXISTS idx_sessions_table ON game_sessions(table_id);
-CREATE INDEX IF NOT EXISTS idx_mj_rounds_session ON mahjong_rounds(session_id);
-CREATE INDEX IF NOT EXISTS idx_ld_rounds_session ON landlord_rounds(session_id);
+// ==================== 娓叉煋 ====================
+let activePage='tables';
+function switchPage(page){
+  activePage=page;
+  qsa('.page').forEach(function(p){p.classList.remove('active')});
+  $('page-'+page).classList.add('active');
+  qsa('.nav-item').forEach(function(n){n.classList.remove('active')});
+  var navItem=qs('.nav-item[data-page="'+page+'"]');
+  if(navItem)navItem.classList.add('active');
+  renderPage(page);
+}
 
--- RLSç­ç¥ï¼åè®¸ææè®¤è¯ç¨æ·è®¿é®ï¼
-ALTER TABLE tables ENABLE ROW LEVEL SECURITY;
-ALTER TABLE table_members ENABLE ROW LEVEL SECURITY;
-ALTER TABLE game_sessions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE mahjong_rounds ENABLE ROW LEVEL SECURITY;
-ALTER TABLE landlord_rounds ENABLE ROW LEVEL SECURITY;
-
-DO $$ BEGIN
-  IF NOT EXISTS(SELECT 1 FROM pg_policies WHERE policyname='allow_all_tables') THEN
-    CREATE POLICY allow_all_tables ON tables FOR ALL USING(true) WITH CHECK(true);
-    CREATE POLICY allow_all_members ON table_members FOR ALL USING(true) WITH CHECK(true);
-    CREATE POLICY allow_all_sessions ON game_sessions FOR ALL USING(true) WITH CHECK(true);
-    CREATE POLICY allow_all_mj ON mahjong_rounds FOR ALL USING(true) WITH CHECK(true);
-    CREATE POLICY allow_all_ld ON landlord_rounds FOR ALL USING(true) WITH CHECK(true);
-  END IF;
-END $$;`
-
-const FAN_TYPES=['å¹³è¡','ç¢°ç¢°è¡','æ¸ä¸è²','æ··ä¸è²','ä¸å¯¹','åä¸å¹º','æ ä¸è±','æ ä¸ç®','æ¢æ è¡','æµ·åºææ']
-
-const {createApp,ref,reactive,computed,watch,onMounted,nextTick}=Vue
-
-const app=createApp({
-  setup(){
-    // ====== ç¶æ ======
-    const loading=ref(true)
-    const showInitPanel=ref(false)
-    const copyBtnText=ref('å¤å¶SQL')
-    const supabaseSqlEditorUrl=computed(()=>`${SUPABASE_URL.replace('.co','.com')}/project/default/sql`)
-    const initSQL=ref(INIT_SQL)
-
-    const currentTab=ref('tables')
-    const tabs=[
-      {key:'tables',label:'çæ¡',icon:'ð'},
-      {key:'record',label:'è®°è´¦',icon:'âï¸'},
-      {key:'history',label:'è®°å½',icon:'ð'},
-      {key:'stats',label:'ç»è®¡',icon:'ð'}
-    ]
-
-    // çæ¡
-    const tables=ref([])
-    const currentTable=ref(null)
-    const tableMembers=ref([])
-    const joinCode=ref('')
-
-    // åå»ºçæ¡
-    const showCreateTable=ref(false)
-    const newTable=reactive({name:'',game_type:'mahjong'})
-
-    // æå
-    const showAddMember=ref(false)
-    const newMemberName=ref('')
-
-    // éº»å°
-    const mjSession=ref(null)
-    const mjPlayers=ref([])
-    const mjInitialChips=ref(2000)
-    const mjChips=reactive({})
-    const mjRound=reactive({win_type:'',winner:'',loser:'',fan_types:[],gang_types:{ææ :0,ææ :0,è¡¥æ :0}})
-    const mjRoundAmounts=reactive({})
-    const showMjSettle=ref(false)
-    const mjCashRate=ref(0)
-
-    // æå°ä¸»
-    const ldSession=ref(null)
-    const ldPlayers=ref([])
-    const ldBaseScore=ref(1)
-    const ldRounds=ref([])
-    const ldRound=reactive({landlord:'',landlord_multiplier:1,bomb_count:0,spring:false,anti_spring:false,landlord_win:null})
-    const ldTotals=reactive({})
-
-    // è®°å½
-    const historyRounds=ref([])
-    const historyLoaded=ref(false)
-
-    // ç»è®¡
-    const statsLoaded=ref(false)
-    const mjStats=reactive({players:[],trendLabels:[],trendData:{},fanLabels:[],fanData:[]})
-    const ldStats=reactive({players:[],totalBombs:0,springs:0,antiSprings:0,trendLabels:[],trendData:{}})
-
-    // Toast
-    const toast=reactive({show:false,msg:'',type:'info'})
-
-    // Supabase
-    let supabase=null
-
-    // ====== å·¥å·å½æ° ======
-    function genInviteCode(){return Math.random().toString(36).substring(2,8).toUpperCase()}
-    function genRandomEmail(){const id=Math.random().toString(36).substring(2,10);return `user_${id}@mj.local`}
-    function formatTime(ts){if(!ts)return'';const d=new Date(ts);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
-
-    function showToast(msg,type='info'){
-      toast.show=false;setTimeout(()=>{toast.msg=msg;toast.type=type;toast.show=true},50)
-      setTimeout(()=>{toast.show=false},2500)
-    }
-
-    // ====== Supabase åå§å ======
-    async function initSupabase(){
-      supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
-      // å°è¯å¿åç»å½
-      let email=localStorage.getItem('mj_email')
-      let pwd=localStorage.getItem('mj_pwd')
-      if(!email){email=genRandomEmail();pwd='Mahjong2024!';localStorage.setItem('mj_email',email);localStorage.setItem('mj_pwd',pwd)}
-      try{
-        let {data,error}=await supabase.auth.signInWithPassword({email,pwd})
-        if(error){
-          const {data:sData,error:sError}=await supabase.auth.signUp({email,pwd})
-          if(sError){console.warn('Auth failed, using anon:',sError.message)}
-          else if(sData.session){
-            // auto-confirm enabled, got session
-          }else{
-            // try sign in again
-            await supabase.auth.signInWithPassword({email,pwd})
-          }
-        }
-      }catch(e){console.warn('Auth error:',e)}
-    }
-
-    async function checkTables(){
-      try{
-        const {error}=await supabase.from('tables').select('count',{count:'exact',head:true})
-        if(error){
-          if(error.code==='42P01'||error.message.includes('does not exist')){
-            showInitPanel.value=true;return false
-          }
-          // å¶ä»éè¯¯ï¼åè®¾è¡¨å·²å­å¨
-        }
-        return true
-      }catch(e){showInitPanel.value=true;return false}
-    }
-
-    async function retryInit(){
-      showInitPanel.value=false;loading.value=true
-      await initSupabase()
-      const ok=await checkTables()
-      if(ok){showInitPanel.value=false;await loadData()}
-      loading.value=false
-    }
-
-    function copySQL(){
-      navigator.clipboard.writeText(INIT_SQL).then(()=>{
-        copyBtnText.value='å·²å¤å¶ï¼';showToast('SQLå·²å¤å¶å°åªè´´æ¿ï¼è¯·ç²è´´å°Supabase SQL Editoræ§è¡','success')
-        setTimeout(()=>{copyBtnText.value='å¤å¶SQL'},2000)
-      }).catch(()=>{showToast('å¤å¶å¤±è´¥ï¼è¯·æå¨éæ©å¤å¶','error')})
-    }
-
-    // ====== æ°æ®å è½½ ======
-    async function loadTables(){
-      const {data,error}=await supabase.from('tables').select('*').order('created_at',{ascending:false})
-      if(error){showToast('å è½½çæ¡å¤±è´¥: '+error.message,'error');return}
-      tables.value=data||[]
-    }
-
-    async function loadMembers(tableId){
-      const {data}=await supabase.from('table_members').select('*').eq('table_id',tableId)
-      tableMembers.value=data||[]
-    }
-
-    async function createTable(){
-      if(!newTable.name.trim())return
-      const code=genInviteCode()
-      const {data,error}=await supabase.from('tables').insert({
-        name:newTable.name.trim(),game_type:newTable.game_type,invite_code:code
-      }).select().single()
-      if(error){showToast('åå»ºå¤±è´¥: '+error.message,'error');return}
-      showToast('çæ¡åå»ºæåï¼éè¯·ç : '+code,'success')
-      showCreateTable.value=false;newTable.name='';newTable.game_type='mahjong'
-      await loadTables()
-      // æ·»å èªå·±ä¸ºæå
-      const me=localStorage.getItem('mj_my_name')||'æ'
-      await supabase.from('table_members').insert({table_id:data.id,player_name:me})
-      currentTable.value=data
-      await loadMembers(data.id)
-      await resetRecordState()
-    }
-
-    async function joinTable(){
-      const code=joinCode.value.trim().toUpperCase()
-      if(!code)return
-      const {data,error}=await supabase.from('tables').select('*').eq('invite_code',code).single()
-      if(error||!data){showToast('æªæ¾å°è¯¥éè¯·ç ççæ¡','error');return}
-      joinCode.value=''
-      currentTable.value=data
-      await loadMembers(data.id)
-      await resetRecordState()
-      showToast('å·²å å¥çæ¡: '+data.name,'success')
-      await loadTables()
-    }
-
-    function selectTable(t){
-      currentTable.value=t
-      loadMembers(t.id)
-      resetRecordState()
-    }
-
-    async function addMember(){
-      const name=newMemberName.value.trim()
-      if(!name||!currentTable.value)return
-      if(tableMembers.value.find(m=>m.player_name===name)){showToast('è¯¥æåå·²å­å¨','error');return}
-      const {error}=await supabase.from('table_members').insert({table_id:currentTable.value.id,player_name:name})
-      if(error){showToast('æ·»å å¤±è´¥: '+error.message,'error');return}
-      newMemberName.value='';showAddMember.value=false
-      await loadMembers(currentTable.value.id)
-      showToast('å·²æ·»å : '+name,'success')
-    }
-
-    function resetRecordState(){
-      mjSession.value=null;mjPlayers.value=[];mjRound.win_type='';mjRound.winner='';mjRound.loser=''
-      mjRound.fan_types=[];mjRound.gang_types={ææ :0,ææ :0,è¡¥æ :0}
-      Object.keys(mjChips).forEach(k=>delete mjChips[k])
-      Object.keys(mjRoundAmounts).forEach(k=>delete mjRoundAmounts[k])
-      ldSession.value=null;ldPlayers.value=[];ldRounds.value=[]
-      ldRound.landlord='';ldRound.landlord_multiplier=1;ldRound.bomb_count=0
-      ldRound.spring=false;ldRound.anti_spring=false;ldRound.landlord_win=null
-      Object.keys(ldTotals).forEach(k=>delete ldTotals[k])
-      historyRounds.value=[];historyLoaded.value=false
-      statsLoaded.value=false
-    }
-
-    // ====== éº»å°é»è¾ ======
-    const hasMjBankrupt=computed(()=>Object.values(mjChips).some(v=>v<=0))
-
-    function toggleMjPlayer(name){
-      const idx=mjPlayers.value.indexOf(name)
-      if(idx>=0)mjPlayers.value.splice(idx,1)
-      else if(mjPlayers.value.length<4)mjPlayers.value.push(name)
-    }
-
-    function toggleFanType(f){const idx=mjRound.fan_types.indexOf(f);if(idx>=0)mjRound.fan_types.splice(idx,1);else mjRound.fan_types.push(f)}
-
-    async function startMjSession(){
-      if(mjPlayers.value.length<2)return
-      const chips={};mjPlayers.value.forEach(p=>chips[p]=mjInitialChips.value)
-      Object.assign(mjChips,chips)
-      Object.keys(mjChips).forEach(k=>{if(!mjPlayers.value.includes(k))delete mjChips[k]})
-      mjPlayers.value.forEach(p=>{if(!(p in mjRoundAmounts))mjRoundAmounts[p]=0})
-      const {data,error}=await supabase.from('game_sessions').insert({
-        table_id:currentTable.value.id,game_type:'mahjong',status:'active',
-        players_json:JSON.stringify({players:mjPlayers.value,initial_chips:mjInitialChips.value})
-      }).select().single()
-      if(error){showToast('å¼å±å¤±è´¥: '+error.message,'error');return}
-      mjSession.value=data
-      showToast('éº»å°å¼å±ï¼','success')
-    }
-
-    async function addMjRound(){
-      if(!mjSession.value)return
-      const winner=mjRound.winner||mjPlayers.value[0]
-      // æ´æ°ç­¹ç 
-      for(const [p,amt] of Object.entries(mjRoundAmounts)){
-        if(!(p in mjChips))mjChips[p]=mjInitialChips.value
-        mjChips[p]=(mjChips[p]||0)+(Number(amt)||0)
-      }
-      const {error}=await supabase.from('mahjong_rounds').insert({
-        session_id:mjSession.value.id,
-        winner:mjRound.winner||null,
-        loser:mjRound.loser||null,
-        win_type:mjRound.win_type||null,
-        fan_types_json:JSON.stringify(mjRound.fan_types),
-        gang_types_json:JSON.stringify(mjRound.gang_types),
-        amount:Object.values(mjRoundAmounts).reduce((a,b)=>a+(Number(b)||0),0),
-        created_at:new Date().toISOString()
-      })
-      if(error){showToast('è®°å½å¤±è´¥: '+error.message,'error');return}
-      showToast('å·²è®°å½','success')
-      // éç½®
-      mjRound.win_type='';mjRound.winner='';mjRound.loser='';mjRound.fan_types=[]
-      mjRound.gang_types={ææ :0,ææ :0,è¡¥æ :0}
-      mjPlayers.value.forEach(p=>{mjRoundAmounts[p]=0})
-      if(hasMjBankrupt.value)showMjSettle.value=true
-    }
-
-    async function settleMjSession(){
-      await supabase.from('game_sessions').update({
-        status:'settled',ended_at:new Date().toISOString()
-      }).eq('id',mjSession.value.id)
-      showMjSettle.value=false;mjSession.value=null
-      showToast('å·²ç»ç®','success')
-    }
-
-    // ====== æå°ä¸»é»è¾ ======
-    function toggleLdPlayer(name){
-      const idx=ldPlayers.value.indexOf(name)
-      if(idx>=0)ldPlayers.value.splice(idx,1)
-      else if(ldPlayers.value.length<3)ldPlayers.value.push(name)
-    }
-
-    async function startLdSession(){
-      if(ldPlayers.value.length!==3)return
-      const {data,error}=await supabase.from('game_sessions').insert({
-        table_id:currentTable.value.id,game_type:'landlord',status:'active',
-        players_json:JSON.stringify({players:ldPlayers.value,base_score:ldBaseScore.value})
-      }).select().single()
-      if(error){showToast('å¼å±å¤±è´¥: '+error.message,'error');return}
-      ldSession.value=data
-      ldRounds.value=[]
-      ldPlayers.value.forEach(p=>ldTotals[p]=0)
-      showToast('æå°ä¸»å¼å±ï¼','success')
-    }
-
-    function addLdRound(){
-      if(!ldSession.value||!ldRound.landlord||ldRound.landlord_win===null)return
-      const landlord=ldRound.landlord
-      const farmers=ldPlayers.value.filter(p=>p!==landlord)
-      let multiplier=ldRound.landlord_multiplier*Math.pow(2,ldRound.bomb_count)
-      if(ldRound.spring)multiplier*=2
-      if(ldRound.anti_spring)multiplier*=2
-      const base=ldBaseScore.value*multiplier
-      const amount={}
-      if(ldRound.landlord_win){
-        amount[landlord]=base*2
-        farmers.forEach(f=>amount[f]=-base)
-      }else{
-        amount[landlord]=-base*2
-        farmers.forEach(f=>amount[f]=base)
-      }
-      for(const [p,amt] of Object.entries(amount)){ldTotals[p]=(ldTotals[p]||0)+amt}
-      const roundData={
-        session_id:ldSession.value.id,
-        landlord,landlord_multiplier:ldRound.landlord_multiplier,
-        bomb_count:ldRound.bomb_count,spring:ldRound.spring||false,
-        farmers_json:JSON.stringify(farmers),
-        base_score:ldBaseScore.value,
-        result_json:JSON.stringify({landlord_win:ldRound.landlord_win,spring:ldRound.spring,anti_spring:ldRound.anti_spring}),
-        amount_json:JSON.stringify(amount),
-        created_at:new Date().toISOString()
-      }
-      supabase.from('landlord_rounds').insert(roundData).then(({error})=>{
-        if(error)showToast('ä¿å­å¤±è´¥: '+error.message,'error')
-      })
-      ldRounds.value.push(roundData)
-      // éç½®
-      ldRound.landlord='';ldRound.landlord_multiplier=1;ldRound.bomb_count=0
-      ldRound.spring=false;ldRound.anti_spring=false;ldRound.landlord_win=null
-      showToast('å·²è®°å½','success')
-    }
-
-    async function endLdSession(){
-      await supabase.from('game_sessions').update({status:'settled',ended_at:new Date().toISOString()}).eq('id',ldSession.value.id)
-      ldSession.value=null;ldRounds.value=[]
-      Object.keys(ldTotals).forEach(k=>delete ldTotals[k])
-      showToast('çå±å·²ç»æ','success')
-    }
-
-    // ====== è®°å½å è½½ ======
-    async function loadHistory(){
-      if(!currentTable.value)return
-      historyLoaded.value=false
-      const rounds=[]
-      if(currentTable.value.game_type==='mahjong'){
-        const {data:sessions}=await supabase.from('game_sessions').select('id').eq('table_id',currentTable.value.id).eq('game_type','mahjong')
-        if(sessions&&sessions.length>0){
-          const ids=sessions.map(s=>s.id)
-          const {data}=await supabase.from('mahjong_rounds').select('*').in('session_id',ids).order('created_at',{ascending:false}).limit(50)
-          if(data)data.forEach(r=>{
-            const fans=r.fan_types_json&&r.fan_types_json!=='[]'?JSON.parse(r.fan_types_json):[]
-            const ggs=r.gang_types_json?JSON.parse(r.gang_types_json):{}
-            let summary=`${r.winner||'?'} ${r.win_type||'è¡'}`
-            if(fans.length>0)summary+=` [${fans.join(',')}]`
-            rounds.push({...r,_key:'mj_'+r.id,_summary:summary,game_type:'mahjong'})
-          })
-        }
-      }else{
-        const {data:sessions}=await supabase.from('game_sessions').select('id').eq('table_id',currentTable.value.id).eq('game_type','landlord')
-        if(sessions&&sessions.length>0){
-          const ids=sessions.map(s=>s.id)
-          const {data}=await supabase.from('landlord_rounds').select('*').in('session_id',ids).order('created_at',{ascending:false}).limit(50)
-          if(data)data.forEach(r=>{
-            const amt=r.amount_json?JSON.parse(r.amount_json):{}
-            let summary=`${r.landlord}(å°ä¸») ${Object.entries(amt).map(([k,v])=>`${k}:${v>0?'+':''}${v}`).join(' ')}`
-            if(r.bomb_count>0)summary+=` | ${r.bomb_count}ç¸`
-            if(r.spring)summary+=' | æ¥å¤©'
-            rounds.push({...r,_key:'ld_'+r.id,_summary:summary,game_type:'landlord'})
-          })
-        }
-      }
-      historyRounds.value=rounds
-      historyLoaded.value=true
-    }
-
-    // ====== ç»è®¡å è½½ ======
-    async function loadStats(){
-      if(!currentTable.value)return
-      statsLoaded.value=false
-      if(currentTable.value.game_type==='mahjong'){
-        const {data:sessions}=await supabase.from('game_sessions').select('id').eq('table_id',currentTable.value.id).eq('game_type','mahjong')
-        if(!sessions||sessions.length===0){statsLoaded.value=true;return}
-        const ids=sessions.map(s=>s.id)
-        const {data}=await supabase.from('mahjong_rounds').select('*').in('session_id',ids).order('created_at',{ascending:true})
-        const rounds=data||[]
-        // æäººç»è®¡
-        const playerMap={}
-        rounds.forEach(r=>{
-          // ä»sessionè·åplayers?
-        })
-        // ç®åç»è®¡ï¼åºäºè®°å½ä¸­çwinner/loser
-        const fanCount={};const trendByDate={}
-        rounds.forEach(r=>{
-          const date=new Date(r.created_at).toISOString().slice(0,10)
-          if(!trendByDate[date])trendByDate[date]={}
-          const fans=r.fan_types_json&&r.fan_types_json!=='[]'?JSON.parse(r.fan_types_json):[]
-          fans.forEach(f=>{fanCount[f]=(fanCount[f]||0)+1})
-        })
-        mjStats.trendLabels=Object.keys(trendByDate).slice(-30)
-        mjStats.trendData={}
-        mjStats.fanLabels=Object.keys(fanCount)
-        mjStats.fanData=Object.values(fanCount)
-        mjStats.players=tableMembers.value.map(m=>({name:m.player_name,net:0,rounds:0}))
-        statsLoaded.value=true
-        await nextTick()
-        renderCharts()
-      }else{
-        const {data:sessions}=await supabase.from('game_sessions').select('id').eq('table_id',currentTable.value.id).eq('game_type','landlord')
-        if(!sessions||sessions.length===0){statsLoaded.value=true;return}
-        const ids=sessions.map(s=>s.id)
-        const {data}=await supabase.from('landlord_rounds').select('*').in('session_id',ids).order('created_at',{ascending:true})
-        const rounds=data||[]
-        let totalBombs=0,springs=0,antiSprings=0
-        const playerTotals={}
-        rounds.forEach(r=>{
-          totalBombs+=r.bomb_count||0
-          if(r.spring)springs++
-          const result=r.result_json?JSON.parse(r.result_json):{}
-          if(result.anti_spring)antiSprings++
-          const amt=r.amount_json?JSON.parse(r.amount_json):{}
-          for(const[p,v] of Object.entries(amt)){playerTotals[p]=(playerTotals[p]||0)+(Number(v)||0)}
-        })
-        ldStats.totalBombs=totalBombs;ldStats.springs=springs;ldStats.antiSprings=antiSprings
-        ldStats.players=Object.entries(playerTotals).map(([name,net])=>({name,net,rounds:rounds.filter(r=>{
-          const amt=r.amount_json?JSON.parse(r.amount_json):{};return name in amt
-        }).length}))
-        ldStats.trendLabels=[];ldStats.trendData={}
-        statsLoaded.value=true
-      }
-    }
-
-    function renderCharts(){
-      if(currentTable.value?.game_type==='mahjong'){
-        // çªåé¥¼å¾
-        if(mjStats.fanLabels.length>0){
-          const ctx=document.getElementById('fanChart')
-          if(ctx&&!ctx._chart){
-            ctx._chart=new Chart(ctx,{type:'doughnut',data:{labels:mjStats.fanLabels,datasets:[{data:mjStats.fanData,backgroundColor:['#e2b04a','#e74c3c','#3498db','#2ecc71','#9b59b6','#e67e22','#1abc9c','#f39c12','#c0392b','#2980b9']}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#a0a0b8',padding:12,font:{size:11}}}}}})
-          }
-        }
-      }
-    }
-
-    // ====== tabåæ¢ ======
-    function switchTab(key){
-      currentTab.value=key
-      if(key==='history')loadHistory()
-      if(key==='stats')loadStats()
-      if(key==='tables')loadTables()
-    }
-
-    // ====== åå§å ======
-    async function loadData(){
-      await loadTables()
-      // æ¢å¤ä¸æ¬¡éæ©ççæ¡
-      const savedTableId=localStorage.getItem('mj_current_table')
-      if(savedTableId){
-        const t=tables.value.find(t=>t.id===savedTableId)
-        if(t){currentTable.value=t;await loadMembers(t.id)}
-      }
-      loading.value=false
-    }
-
-    watch(currentTable,(t)=>{if(t){localStorage.setItem('mj_current_table',t.id);resetRecordState()}else{localStorage.removeItem('mj_current_table')}})
-
-    onMounted(async()=>{
-      await initSupabase()
-      const ok=await checkTables()
-      if(!ok){loading.value=false;return}
-      await loadData()
-    })
-
-    return {
-      loading,showInitPanel,copyBtnText,supabaseSqlEditorUrl,initSQL,copySQL,retryInit,
-      currentTab,tabs,switchTab,
-      tables,currentTable,tableMembers,joinCode,joinTable,selectTable,
-      showCreateTable,newTable,createTable,
-      showAddMember,newMemberName,addMember,
-      mjSession,mjPlayers,mjInitialChips,mjChips,mjRound,mjRoundAmounts,
-      hasMjBankrupt,showMjSettle,mjCashRate,
-      toggleMjPlayer,toggleFanType,startMjSession,addMjRound,settleMjSession,
-      ldSession,ldPlayers,ldBaseScore,ldRounds,ldRound,ldTotals,
-      toggleLdPlayer,startLdSession,addLdRound,endLdSession,
-      historyRounds,historyLoaded,loadHistory,
-      statsLoaded,mjStats,ldStats,loadStats,
-      fanTypes:FAN_TYPES,formatTime,toast
-    }
+function renderAll(){renderPage(activePage)}
+function renderPage(page){
+  switch(page){
+    case 'tables':renderTables();break;
+    case 'record':renderRecord();break;
+    case 'history':renderHistory();break;
+    case 'stats':renderStats();break;
   }
-})
-app.mount('#app')
+}
+
+// ==================== 瀵艰埅 ====================
+function initNav(){
+  var tabs=[
+    {key:'tables',label:'鐗屾',icon:'馃€?},
+    {key:'record',label:'璁拌处',icon:'鉁忥笍'},
+    {key:'history',label:'璁板綍',icon:'馃摐'},
+    {key:'stats',label:'缁熻',icon:'馃搳'}
+  ];
+  var html='';
+  tabs.forEach(function(t){
+    html+='<div class="nav-item'+(activePage===t.key?' active':'')+'" data-page="'+t.key+'"><span class="icon">'+t.icon+'</span><span>'+t.label+'</span></div>';
+  });
+  $('nav-bar').innerHTML=html;
+  qsa('.nav-item').forEach(function(item){
+    item.addEventListener('click',function(){switchPage(this.dataset.page)});
+  });
+}
+
+// ==================== 鐗屾椤?====================
+function renderTables(){
+  var tables=loadTables();
+  var html='<div class="card-title" style="font-size:18px;margin-bottom:16px;">鎴戠殑鐗屾</div>';
+  if(tables.length===0){
+    html+='<div class="empty-state"><div class="icon">馃€?/div><div>杩樻病鏈夌墝妗岋紝鍒涘缓涓€涓惂</div></div>';
+  }else{
+    tables.forEach(function(id){
+      var t=loadTableData(id);
+      if(!t)return;
+      var isActive=currentTableId===id;
+      html+='<div class="card" style="cursor:pointer;'+(isActive?'border-color:var(--gold);':'')+'" data-table-id="'+id+'">';
+      html+='<div class="row-between"><div><span style="font-weight:600;">'+esc(t.name)+'</span>';
+      html+='<span class="badge '+(t.game_type==='mahjong'?'badge-mj':'badge-ld')+'" style="margin-left:8px;">'+(t.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
+      html+='<span style="font-size:12px;color:var(--text2);">'+t.members.length+'浜?/span></div>';
+      html+='<div style="font-size:12px;color:var(--text3);margin-top:6px;">'+fmt(t.created_at)+' 鍒涘缓';
+      if(isActive)html+=' <span style="color:var(--gold);">鉁撳綋鍓?/span>';
+      html+='</div></div>';
+    });
+  }
+  html+='<button class="btn btn-primary btn-block" id="btn-create-table" style="margin-top:8px;">+ 鍒涘缓鏂扮墝妗?/button>';
+  $('page-tables').innerHTML=html;
+
+  // 缁戝畾浜嬩欢
+  qsa('[data-table-id]',$('page-tables')).forEach(function(card){
+    card.addEventListener('click',function(){setCurrentTable(this.dataset.tableId)});
+  });
+  var btnCreate=$('btn-create-table');
+  if(btnCreate)btnCreate.addEventListener('click',showCreateTableModal);
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function showCreateTableModal(){
+  var body='<div class="form-group"><span class="label">鐗屾鍚嶇О</span><input class="input" id="new-table-name" placeholder="濡傦細鍛ㄦ湯楹诲皢灞€"></div>';
+  body+='<div class="form-group"><span class="label">娓告垙绫诲瀷</span>';
+  body+='<div class="tag-grid"><span class="tag selected" data-gt="mahjong" id="gt-mj">楹诲皢</span><span class="tag" data-gt="landlord" id="gt-ld">鏂楀湴涓?/span></div></div>';
+  body+='<div class="btn-group" style="margin-top:16px;"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-create">鍙栨秷</button><button class="btn btn-primary" style="flex:1" id="btn-confirm-create">鍒涘缓</button></div>';
+  var m=openModal('鍒涘缓鏂扮墝妗?,body);
+  var gameType='mahjong';
+  m.modal.querySelector('#gt-mj').addEventListener('click',function(){gameType='mahjong';this.classList.add('selected');m.modal.querySelector('#gt-ld').classList.remove('selected')});
+  m.modal.querySelector('#gt-ld').addEventListener('click',function(){gameType='landlord';this.classList.add('selected');m.modal.querySelector('#gt-mj').classList.remove('selected')});
+  m.modal.querySelector('#btn-cancel-create').addEventListener('click',function(){m.close()});
+  m.modal.querySelector('#btn-confirm-create').addEventListener('click',function(){
+    var name=m.modal.querySelector('#new-table-name').value.trim();
+    if(!name){toast('璇疯緭鍏ョ墝妗屽悕绉?,'error');return}
+    var id=genId();
+    var table={id:id,name:name,game_type:gameType,created_at:new Date().toISOString(),members:[],sessions:[]};
+    saveTableData(id,table);
+    var tables=loadTables();tables.unshift(id);saveTables(tables);
+    setCurrentTable(id);
+    m.close();
+    toast('鐗屾鍒涘缓鎴愬姛','success');
+  });
+}
+
+// ==================== 璁拌处椤?====================
+function renderRecord(){
+  var table=getCurrentTable();
+  if(!table){
+    $('page-record').innerHTML='<div class="empty-state"><div class="icon">馃搵</div><div>璇峰厛鍦ㄣ€岀墝妗屻€嶄腑閫夋嫨涓€寮犳</div></div>';
+    return;
+  }
+  var html='<div class="row-between" style="margin-bottom:12px;"><div><span style="font-weight:600;font-size:16px;">'+esc(table.name)+'</span>';
+  html+='<span class="badge '+(table.game_type==='mahjong'?'badge-mj':'badge-ld')+'" style="margin-left:8px;">'+(table.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
+  html+='<button class="btn btn-sm btn-secondary" id="btn-switch-table">鍒囨崲鐗屾</button></div>';
+  if(table.game_type==='mahjong')html+=renderMahjongRecord(table);
+  else html+=renderLandlordRecord(table);
+  $('page-record').innerHTML=html;
+
+  var btnSwitch=$('btn-switch-table');
+  if(btnSwitch)btnSwitch.addEventListener('click',function(){setCurrentTable(null);switchPage('tables')});
+
+  if(table.game_type==='mahjong')bindMahjongEvents(table);
+  else bindLandlordEvents(table);
+}
+
+// ---- 楹诲皢 ----
+function renderMahjongRecord(table){
+  var activeSession=findActiveSession(table,'mahjong');
+  if(!activeSession){
+    var html='<div class="card"><div class="card-title">寮€濮嬫柊涓€灞€</div>';
+    html+='<div class="form-group"><span class="label">鍙備笌浜哄憳锛?-4浜猴級</span></div>';
+    html+='<div class="tag-grid" id="mj-player-tags">';
+    table.members.forEach(function(m){
+      html+='<span class="tag mj-player-tag" data-name="'+esc(m.name)+'">'+esc(m.name)+'</span>';
+    });
+    html+='<button class="btn btn-sm btn-secondary" id="btn-add-member-mj" style="margin:2px;">+ 娣诲姞鎴愬憳</button></div>';
+    html+='<div class="form-group" id="mj-chip-group" style="display:none;"><span class="label">姣忎汉鍒濆绛圭爜</span><input class="input" type="number" id="mj-init-chips" value="2000" style="width:140px;"></div>';
+    html+='<button class="btn btn-primary btn-block" id="btn-start-mj" disabled>寮€灞€锛堣閫夋嫨浜哄憳锛?/button>';
+    html+='<p class="hint-text">鑷冲皯閫夋嫨2浜?/p></div>';
+    return html;
+  }
+  // 杩涜涓?  var chips=activeSession.chips||{};
+  var initialChips=activeSession.initial_chips||2000;
+  var hasBankrupt=Object.values(chips).some(function(v){return v<=0});
+  var html='';
+  if(hasBankrupt){
+    html+='<div class="banner-warn"><span>鏈夌帺瀹剁鐮佲墹0锛屽缓璁粨绠?/span><button class="btn btn-sm btn-danger" id="btn-settle-mj">缁撶畻</button></div>';
+  }
+  html+='<div class="card"><div class="card-title">褰撳墠绛圭爜</div>';
+  activeSession.players.forEach(function(p){
+    var c=chips[p]||initialChips;
+    html+='<div class="row-between" style="margin-bottom:6px;"><div class="row" style="gap:8px;"><div class="player-avatar" style="width:28px;height:28px;font-size:12px;">'+esc(p[0])+'</div><span>'+esc(p)+'</span></div>';
+    html+='<span class="'+(c<=0?'chip-low':'')+'" style="font-size:14px;">'+c+'</span></div>';
+  });
+  html+='<button class="btn btn-sm btn-danger" style="margin-top:8px;" id="btn-manual-settle-mj">鎵嬪姩缁撶畻</button></div>';
+
+  html+='<div class="card"><div class="card-title">璁板綍鏂颁竴灞€</div>';
+  html+='<div class="form-group"><span class="label">鑳＄墝鏂瑰紡锛堝彲閫夛級</span><select class="select" id="mj-win-type"><option value="">璺宠繃</option><option value="鑷懜">鑷懜</option><option value="鐐圭偖">鐐圭偖</option></select></div>';
+  html+='<div class="form-group" id="mj-winner-group" style="display:none;"><span class="label">鑳＄墝鑰?/span><select class="select" id="mj-winner"><option value="">璇烽€夋嫨</option>'+activeSession.players.map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('')+'</select></div>';
+  html+='<div class="form-group" id="mj-loser-group" style="display:none;"><span class="label">鐐圭偖鑰?/span><select class="select" id="mj-loser"><option value="">璇烽€夋嫨</option></select></div>';
+  html+='<div class="form-group"><span class="label">鐣瀷锛堝彲澶氶€夛紝鍙€夛級</span><div class="tag-grid" id="mj-fan-tags">'+FAN_TYPES.map(function(f){return'<span class="tag mj-fan-tag" data-fan="'+esc(f)+'">'+esc(f)+'</span>'}).join('')+'</div></div>';
+  html+='<div class="form-group"><span class="label">鏉犵墝鏄庣粏锛堝彲閫夛級</span>';
+  html+='<div style="display:flex;gap:12px;flex-wrap:wrap;">';
+  ['鏄庢潬','鏆楁潬','琛ユ潬'].forEach(function(g){
+    html+='<div class="counter-row"><span style="font-size:13px;color:var(--text2);">'+g+'</span><button class="btn btn-sm btn-secondary mj-gang-dec" data-gang="'+g+'">-</button><span class="min-w" id="mj-gang-'+g+'">0</span><button class="btn btn-sm btn-secondary mj-gang-inc" data-gang="'+g+'">+</button></div>';
+  });
+  html+='</div></div>';
+  html+='<div class="form-group"><span class="label">杈撹耽閲戦 / 绛圭爜鍙樺姩</span>';
+  activeSession.players.forEach(function(p){
+    html+='<div class="row" style="margin-bottom:4px;gap:8px;"><span style="width:50px;font-size:13px;">'+esc(p)+'</span><input class="input mj-amount-input" type="number" data-player="'+esc(p)+'" placeholder="杈撹耽閲戦" style="flex:1;height:32px;"></div>';
+  });
+  html+='</div>';
+  html+='<button class="btn btn-primary btn-block" id="btn-add-mj-round">璁板綍鏈眬</button></div>';
+  return html;
+}
+
+function findActiveSession(table,gameType){
+  if(!table||!table.sessions)return null;
+  for(var i=table.sessions.length-1;i>=0;i--){
+    if(table.sessions[i].game_type===gameType&&table.sessions[i].status==='active')return table.sessions[i];
+  }
+  return null;
+}
+
+function bindMahjongEvents(table){
+  var selectedPlayers=[];
+  function updatePlayerUI(){
+    qsa('.mj-player-tag',$('page-record')).forEach(function(tag){
+      if(selectedPlayers.indexOf(tag.dataset.name)>=0)tag.classList.add('selected');
+      else tag.classList.remove('selected');
+    });
+    var btn=$('btn-start-mj');
+    var chipGroup=$('mj-chip-group');
+    if(btn){btn.disabled=selectedPlayers.length<2;btn.textContent='寮€灞€锛?+selectedPlayers.length+'浜猴級'}
+    if(chipGroup&&selectedPlayers.length>=2)chipGroup.style.display='block';
+    else if(chipGroup)chipGroup.style.display='none';
+  }
+  qsa('.mj-player-tag',$('page-record')).forEach(function(tag){
+    tag.addEventListener('click',function(){
+      var name=this.dataset.name;
+      var idx=selectedPlayers.indexOf(name);
+      if(idx>=0)selectedPlayers.splice(idx,1);
+      else if(selectedPlayers.length<4)selectedPlayers.push(name);
+      updatePlayerUI();
+    });
+  });
+  var btnAddMember=$('btn-add-member-mj');
+  if(btnAddMember)btnAddMember.addEventListener('click',function(){showAddMemberModal(table)});
+
+  var btnStart=$('btn-start-mj');
+  if(btnStart)btnStart.addEventListener('click',function(){
+    if(selectedPlayers.length<2)return;
+    var chips={};var initChips=parseInt($('mj-init-chips').value)||2000;
+    selectedPlayers.forEach(function(p){chips[p]=initChips});
+    var session={id:genId(),game_type:'mahjong',started_at:new Date().toISOString(),status:'active',
+      players:selectedPlayers.slice(),initial_chips:initChips,chips:chips,rounds:[]};
+    table.sessions.push(session);
+    saveTableData(table.id,table);
+    renderRecord();
+    toast('楹诲皢寮€灞€锛?,'success');
+  });
+
+  // 杩涜涓殑浜嬩欢
+  var winTypeSel=$('mj-win-type');
+  if(winTypeSel)winTypeSel.addEventListener('change',function(){
+    var winnerGroup=$('mj-winner-group');
+    var loserGroup=$('mj-loser-group');
+    if(this.value){if(winnerGroup)winnerGroup.style.display='block';if(loserGroup)loserGroup.style.display=(this.value==='鐐圭偖'?'block':'none')}
+    else{if(winnerGroup)winnerGroup.style.display='none';if(loserGroup)loserGroup.style.display='none'}
+  });
+
+  var winnerSel=$('mj-winner');
+  if(winnerSel)winnerSel.addEventListener('change',function(){
+    var loserSel=$('mj-loser');if(!loserSel)return;
+    var session=findActiveSession(table,'mahjong');if(!session)return;
+    loserSel.innerHTML='<option value="">璇烽€夋嫨</option>'+session.players.filter(function(p){return p!==winnerSel.value}).map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('');
+  });
+
+  // 鏉犵墝
+  qsa('.mj-gang-inc',$('page-record')).forEach(function(btn){
+    btn.addEventListener('click',function(){var g=this.dataset.gang;var el=$('mj-gang-'+g);if(el)el.textContent=parseInt(el.textContent)+1});
+  });
+  qsa('.mj-gang-dec',$('page-record')).forEach(function(btn){
+    btn.addEventListener('click',function(){var g=this.dataset.gang;var el=$('mj-gang-'+g);if(el)el.textContent=Math.max(0,parseInt(el.textContent)-1)});
+  });
+
+  // 鐣瀷
+  var selectedFans=[];
+  qsa('.mj-fan-tag',$('page-record')).forEach(function(tag){
+    tag.addEventListener('click',function(){
+      var f=this.dataset.fan;
+      var idx=selectedFans.indexOf(f);
+      if(idx>=0)selectedFans.splice(idx,1);else selectedFans.push(f);
+      if(selectedFans.indexOf(f)>=0)this.classList.add('selected');else this.classList.remove('selected');
+    });
+  });
+
+  var btnAddRound=$('btn-add-mj-round');
+  if(btnAddRound)btnAddRound.addEventListener('click',function(){
+    var session=findActiveSession(table,'mahjong');if(!session)return;
+    var winner=($('mj-winner')||{}).value||session.players[0];
+    var loser=($('mj-loser')||{}).value||'';
+    var winType=($('mj-win-type')||{}).value||'';
+    var gangTypes={};
+    ['鏄庢潬','鏆楁潬','琛ユ潬'].forEach(function(g){var el=$('mj-gang-'+g);gangTypes[g]=el?parseInt(el.textContent):0});
+    var amounts={};
+    var hasAmount=false;
+    qsa('.mj-amount-input',$('page-record')).forEach(function(inp){
+      var v=parseInt(inp.value)||0;amounts[inp.dataset.player]=v;if(v!==0)hasAmount=true;
+    });
+    if(!hasAmount){toast('璇疯嚦灏戣緭鍏ヤ竴涓緭璧㈤噾棰?,'error');return}
+
+    // 鏇存柊绛圭爜
+    Object.keys(amounts).forEach(function(p){if(session.chips[p]===undefined)session.chips[p]=session.initial_chips});
+    Object.keys(amounts).forEach(function(p){session.chips[p]=(session.chips[p]||0)+amounts[p]});
+
+    session.rounds.push({id:genId(),winner:winner,loser:loser,win_type:winType,fan_types:selectedFans.slice(),
+      gang_types:gangTypes,amounts:amounts,created_at:new Date().toISOString()});
+    saveTableData(table.id,table);
+
+    // 妫€鏌ョ牬浜?    var bankrupt=session.players.some(function(p){return(session.chips[p]||0)<=0});
+
+    // 閲嶇疆琛ㄥ崟
+    renderRecord();
+    if(bankrupt){setTimeout(function(){showMjSettleModal(table)},300)}
+    toast('宸茶褰?+(bankrupt?' - 鏈変汉鐮翠骇锛屽缓璁粨绠?:''),bankrupt?'error':'success');
+  });
+
+  // 缁撶畻
+  var btnSettle=$('btn-settle-mj')||$('btn-manual-settle-mj');
+  if(btnSettle)btnSettle.addEventListener('click',function(){showMjSettleModal(table)});
+}
+
+function showMjSettleModal(table){
+  var session=findActiveSession(table,'mahjong');if(!session)return;
+  var chips=session.chips||{};var init=session.initial_chips||2000;
+  var body='';
+  session.players.forEach(function(p){
+    var c=chips[p]||init;var diff=c-init;
+    body+='<div class="row-between" style="margin-bottom:8px;"><span style="font-weight:500;">'+esc(p)+'</span><div><span class="'+(c<=0?'chip-low':'')+'">绛圭爜: '+c+'</span>';
+    body+='<span style="margin-left:8px;" class="'+(diff>0?'amount-plus':diff<0?'amount-minus':'amount-zero')+'">'+(diff>0?'+':'')+diff+'</span></div></div>';
+  });
+  body+='<div class="form-group" style="margin-top:12px;"><span class="label">鐜伴噾鎹㈢畻锛堝彲閫夛紝1绛圭爜=锛熷厓锛?/span><input class="input" type="number" id="mj-cash-rate" placeholder="濡?0.01" value="0" step="0.01"></div>';
+  body+='<p id="mj-cash-display" style="font-size:13px;color:var(--text2);margin-bottom:8px;"></p>';
+  body+='<div class="btn-group"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-settle">鍙栨秷</button><button class="btn btn-danger" style="flex:1" id="btn-confirm-settle">纭缁撶畻</button></div>';
+  var m=openModal('缁撶畻',body);
+
+  function updateCash(){var r=parseFloat(m.modal.querySelector('#mj-cash-rate').value)||0;var d=$('mj-cash-display');if(!d)return;var s='';if(r>0){session.players.forEach(function(p){var c=chips[p]||init;s+=esc(p)+': '+((c-init)*r).toFixed(2)+'鍏?&nbsp;';})}d.innerHTML=s}
+  m.modal.querySelector('#mj-cash-rate').addEventListener('input',updateCash);
+
+  m.modal.querySelector('#btn-cancel-settle').addEventListener('click',function(){m.close()});
+  m.modal.querySelector('#btn-confirm-settle').addEventListener('click',function(){
+    session.status='settled';session.ended_at=new Date().toISOString();
+    saveTableData(table.id,table);
+    m.close();renderRecord();
+    toast('宸茬粨绠?,'success');
+  });
+}
+
+// ---- 鏂楀湴涓?----
+function renderLandlordRecord(table){
+  var activeSession=findActiveSession(table,'landlord');
+  if(!activeSession){
+    var html='<div class="card"><div class="card-title">寮€濮嬫柊涓€灞€</div>';
+    html+='<div class="form-group"><span class="label">鍙備笌浜哄憳锛?浜猴級</span></div>';
+    html+='<div class="tag-grid" id="ld-player-tags">';
+    table.members.forEach(function(m){html+='<span class="tag ld-player-tag" data-name="'+esc(m.name)+'">'+esc(m.name)+'</span>'});
+    html+='<button class="btn btn-sm btn-secondary" id="btn-add-member-ld" style="margin:2px;">+ 娣诲姞鎴愬憳</button></div>';
+    html+='<div class="form-group"><span class="label">搴曞垎</span><input class="input" type="number" id="ld-base-score" value="1" style="width:120px;"></div>';
+    html+='<button class="btn btn-primary btn-block" id="btn-start-ld" disabled>寮€灞€锛堥渶閫?浜猴級</button></div>';
+    return html;
+  }
+  var totals=activeSession.totals||{};
+  var html='<div class="card"><div class="card-title">褰撳墠鎴樼哗锛堝叡'+(activeSession.rounds||[]).length+'灞€锛?/div>';
+  activeSession.players.forEach(function(p){
+    var a=totals[p]||0;
+    html+='<div class="row-between" style="margin-bottom:4px;"><span>'+esc(p)+'</span><span class="'+(a>0?'amount-plus':a<0?'amount-minus':'amount-zero')+'">'+(a>0?'+':'')+a+'</span></div>';
+  });
+  html+='<button class="btn btn-sm btn-danger" style="margin-top:8px;" id="btn-end-ld">缁撴潫鐗屽眬</button></div>';
+
+  html+='<div class="card"><div class="card-title">璁板綍鏂颁竴灞€</div>';
+  html+='<div class="form-group"><span class="label">鍦颁富</span><select class="select" id="ld-landlord"><option value="">璇烽€夋嫨</option>'+activeSession.players.map(function(p){return'<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join('')+'</select></div>';
+  html+='<div class="form-group"><span class="label">鍙湴涓诲€嶆暟</span><div class="tag-grid" id="ld-mult-tags"><span class="tag ld-mult-tag selected" data-m="1">1鍊?/span><span class="tag ld-mult-tag" data-m="2">2鍊?/span><span class="tag ld-mult-tag" data-m="3">3鍊?/span></div></div>';
+  html+='<div class="form-group"><span class="label">鐐稿脊鏁?/span><div class="counter-row"><button class="btn btn-sm btn-secondary" id="ld-bomb-dec">-</button><span class="min-w" id="ld-bomb-count">0</span><button class="btn btn-sm btn-secondary" id="ld-bomb-inc">+</button></div></div>';
+  html+='<div class="form-group"><span class="label">鐗规畩</span><div class="tag-grid"><span class="tag" id="ld-spring">鏄ュぉ</span><span class="tag" id="ld-anti-spring">鍙嶆槬澶?/span></div></div>';
+  html+='<div class="form-group"><span class="label">鍦颁富杈撹耽</span><div class="tag-grid" id="ld-result-tags"><span class="tag" data-win="1">鍦颁富璧?/span><span class="tag" data-win="0">鍦颁富杈?/span></div></div>';
+  html+='<button class="btn btn-primary btn-block" id="btn-add-ld-round" disabled>璁板綍鏈眬锛堣閫夋嫨鍦颁富鍜岃緭璧級</button></div>';
+  return html;
+}
+
+function bindLandlordEvents(table){
+  var selectedLdPlayers=[];
+  function updateLdUI(){
+    qsa('.ld-player-tag',$('page-record')).forEach(function(t){
+      t.classList.toggle('selected',selectedLdPlayers.indexOf(t.dataset.name)>=0);
+    });
+    var btn=$('btn-start-ld');if(btn)btn.disabled=selectedLdPlayers.length!==3;
+  }
+  qsa('.ld-player-tag',$('page-record')).forEach(function(tag){
+    tag.addEventListener('click',function(){
+      var name=this.dataset.name;var idx=selectedLdPlayers.indexOf(name);
+      if(idx>=0)selectedLdPlayers.splice(idx,1);else if(selectedLdPlayers.length<3)selectedLdPlayers.push(name);
+      updateLdUI();
+    });
+  });
+  var btnAdd=$('btn-add-member-ld');if(btnAdd)btnAdd.addEventListener('click',function(){showAddMemberModal(table)});
+
+  var btnStart=$('btn-start-ld');
+  if(btnStart)btnStart.addEventListener('click',function(){
+    if(selectedLdPlayers.length!==3)return;
+    var baseScore=parseInt($('ld-base-score').value)||1;
+    var session={id:genId(),game_type:'landlord',started_at:new Date().toISOString(),status:'active',
+      players:selectedLdPlayers.slice(),base_score:baseScore,totals:{},rounds:[]};
+    selectedLdPlayers.forEach(function(p){session.totals[p]=0});
+    table.sessions.push(session);
+    saveTableData(table.id,table);
+    renderRecord();
+    toast('鏂楀湴涓诲紑灞€锛?,'success');
+  });
+
+  // 杩涜涓?  var landlord=null,landlordMult=1,landlordWin=null,bombCount=0,spring=false,antiSpring=false;
+
+  var landSel=$('ld-landlord');if(landSel)landSel.addEventListener('change',function(){landlord=this.value||null;updateLdRoundBtn()});
+  qsa('.ld-mult-tag',$('page-record')).forEach(function(t){t.addEventListener('click',function(){landlordMult=parseInt(this.dataset.m);qsa('.ld-mult-tag',$('page-record')).forEach(function(x){x.classList.remove('selected')});this.classList.add('selected')})});
+  qsa('#ld-result-tags .tag',$('page-record')).forEach(function(t){t.addEventListener('click',function(){landlordWin=this.dataset.win==='1';qsa('#ld-result-tags .tag',$('page-record')).forEach(function(x){x.classList.remove('selected')});this.classList.add('selected');updateLdRoundBtn()})});
+  var bombDec=$('ld-bomb-dec');if(bombDec)bombDec.addEventListener('click',function(){bombCount=Math.max(0,bombCount-1);$('ld-bomb-count').textContent=bombCount});
+  var bombInc=$('ld-bomb-inc');if(bombInc)bombInc.addEventListener('click',function(){bombCount++;$('ld-bomb-count').textContent=bombCount});
+  var springTag=$('ld-spring');if(springTag)springTag.addEventListener('click',function(){spring=!spring;this.classList.toggle('selected',spring)});
+  var antiSpringTag=$('ld-anti-spring');if(antiSpringTag)antiSpringTag.addEventListener('click',function(){antiSpring=!antiSpring;this.classList.toggle('selected',antiSpring)});
+
+  function updateLdRoundBtn(){var btn=$('btn-add-ld-round');if(btn)btn.disabled=!landlord||landlordWin===null}
+
+  var btnAddRound=$('btn-add-ld-round');
+  if(btnAddRound)btnAddRound.addEventListener('click',function(){
+    var session=findActiveSession(table,'landlord');if(!session||!landlord||landlordWin===null)return;
+    var baseScore=session.base_score||1;
+    var mult=(landlordMult||1)*Math.pow(2,bombCount);
+    if(spring)mult*=2;if(antiSpring)mult*=2;
+    var farmers=session.players.filter(function(p){return p!==landlord});
+    var amounts={};
+    if(landlordWin){amounts[landlord]=baseScore*mult*2;farmers.forEach(function(f){amounts[f]=-baseScore*mult})}
+    else{amounts[landlord]=-baseScore*mult*2;farmers.forEach(function(f){amounts[f]=baseScore*mult})}
+    Object.keys(amounts).forEach(function(p){session.totals[p]=(session.totals[p]||0)+amounts[p]});
+
+    session.rounds.push({id:genId(),landlord:landlord,farmers:farmers,base_score:baseScore,
+      landlord_multiplier:landlordMult,bomb_count:bombCount,spring:spring,anti_spring:antiSpring,
+      landlord_win:landlordWin,amounts:amounts,created_at:new Date().toISOString()});
+    saveTableData(table.id,table);
+
+    landlord=null;landlordMult=1;landlordWin=null;bombCount=0;spring=false;antiSpring=false;
+    renderRecord();
+    toast('宸茶褰?,'success');
+  });
+
+  var btnEnd=$('btn-end-ld');if(btnEnd)btnEnd.addEventListener('click',function(){
+    var session=findActiveSession(table,'landlord');if(!session)return;
+    session.status='settled';session.ended_at=new Date().toISOString();
+    saveTableData(table.id,table);
+    renderRecord();toast('鐗屽眬宸茬粨鏉?,'success');
+  });
+}
+
+// ---- 娣诲姞鎴愬憳 ----
+function showAddMemberModal(table){
+  var body='<div class="form-group"><span class="label">鎴愬憳鍚嶇О</span><input class="input" id="new-member-name" placeholder="杈撳叆濮撳悕鎴栨樀绉?></div>';
+  body+='<div class="btn-group" style="margin-top:12px;"><button class="btn btn-secondary" style="flex:1" id="btn-cancel-member">鍙栨秷</button><button class="btn btn-primary" style="flex:1" id="btn-confirm-member">娣诲姞</button></div>';
+  var m=openModal('娣诲姞鎴愬憳',body);
+  m.modal.querySelector('#btn-cancel-member').addEventListener('click',function(){m.close()});
+  m.modal.querySelector('#btn-confirm-member').addEventListener('click',function(){
+    var name=m.modal.querySelector('#new-member-name').value.trim();
+    if(!name){toast('璇疯緭鍏ュ悕绉?,'error');return}
+    if(table.members.some(function(x){return x.name===name})){toast('璇ユ垚鍛樺凡瀛樺湪','error');return}
+    table.members.push({name:name});
+    saveTableData(table.id,table);
+    m.close();renderRecord();
+    toast('宸叉坊鍔? '+name,'success');
+  });
+}
+
+// ==================== 璁板綍椤?====================
+function renderHistory(){
+  var table=getCurrentTable();
+  if(!table){$('page-history').innerHTML='<div class="empty-state"><div class="icon">馃摐</div><div>璇峰厛閫夋嫨鐗屾</div></div>';return}
+  var allRounds=[];
+  (table.sessions||[]).forEach(function(s){
+    (s.rounds||[]).forEach(function(r){
+      var summary='';
+      if(s.game_type==='mahjong'){
+        summary=(r.winner||'?')+' '+(r.win_type||'鑳?);
+        if(r.fan_types&&r.fan_types.length>0)summary+=' ['+r.fan_types.join(',')+']';
+        summary+=' | ';
+        Object.keys(r.amounts||{}).forEach(function(p){var a=r.amounts[p];summary+=p+':'+(a>0?'+':'')+a+' '});
+      }else{
+        summary=r.landlord+'(鍦颁富) ';
+        Object.keys(r.amounts||{}).forEach(function(p){var a=r.amounts[p];summary+=p+':'+(a>0?'+':'')+a+' '});
+        if(r.bomb_count>0)summary+='| '+r.bomb_count+'鐐?;
+        if(r.spring)summary+='| 鏄ュぉ';
+        if(r.anti_spring)summary+='| 鍙嶆槬澶?;
+      }
+      allRounds.push({date:r.created_at,summary:summary,game_type:s.game_type});
+    });
+  });
+  allRounds.sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+
+  var html='<div class="card-title">'+esc(table.name)+' - 璁板綍</div>';
+  if(allRounds.length===0){html+='<div class="empty-state"><div class="icon">馃摥</div><div>鏆傛棤璁板綍</div></div>'}
+  else{
+    allRounds.forEach(function(r){
+      html+='<div class="card" style="padding:10px 14px;"><div class="row-between" style="margin-bottom:4px;">';
+      html+='<span style="font-size:13px;color:var(--text2);">'+fmt(r.date)+'</span>';
+      html+='<span class="badge '+(r.game_type==='mahjong'?'badge-mj':'badge-ld')+'">'+(r.game_type==='mahjong'?'楹诲皢':'鏂楀湴涓?)+'</span></div>';
+      html+='<div style="font-size:13px;">'+esc(r.summary)+'</div></div>';
+    });
+  }
+  $('page-history').innerHTML=html;
+}
+
+// ==================== 缁熻椤?====================
+function renderStats(){
+  var table=getCurrentTable();
+  if(!table){$('page-stats').innerHTML='<div class="empty-state"><div class="icon">馃搳</div><div>璇峰厛閫夋嫨鐗屾</div></div>';return}
+  var html='<div class="card-title">'+esc(table.name)+' - 缁熻</div>';
+  if(table.game_type==='mahjong')html+=renderMjStats(table);
+  else html+=renderLdStats(table);
+  $('page-stats').innerHTML=html;
+}
+
+function renderMjStats(table){
+  var playerStats={};
+  var fanStats={};
+  (table.sessions||[]).forEach(function(s){
+    if(s.game_type!=='mahjong')return;
+    (s.rounds||[]).forEach(function(r){
+      Object.keys(r.amounts||{}).forEach(function(p){
+        if(!playerStats[p])playerStats[p]={net:0,rounds:0};
+        playerStats[p].net+=(r.amounts[p]||0);playerStats[p].rounds++;
+      });
+      (r.fan_types||[]).forEach(function(f){fanStats[f]=(fanStats[f]||0)+1});
+    });
+  });
+  var html='<div class="card"><div class="summary-row">';
+  Object.keys(playerStats).forEach(function(p){
+    var s=playerStats[p];
+    html+='<div class="summary-item"><div class="val '+(s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero')+'">'+(s.net>0?'+':'')+s.net+'</div><div class="lbl">'+esc(p)+' ('+s.rounds+'灞€)</div></div>';
+  });
+  html+='</div></div>';
+  if(Object.keys(fanStats).length>0){
+    var sortedFans=Object.entries(fanStats).sort(function(a,b){return b[1]-a[1]});
+    html+='<div class="card"><div class="card-title">鐣瀷鍒嗗竷</div>';
+    var total=sortedFans.reduce(function(s,x){return s+x[1]},0);
+    sortedFans.forEach(function(e){
+      var pct=Math.round(e[1]/total*100);
+      html+='<div style="margin-bottom:6px;"><div class="row-between" style="margin-bottom:2px;"><span style="font-size:13px;">'+esc(e[0])+'</span><span style="font-size:13px;color:var(--text2);">'+e[1]+' ('+pct+'%)</span></div>';
+      html+='<div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:var(--gold);border-radius:3px;"></div></div></div>';
+    });
+    html+='</div>';
+  }else{html+='<div class="empty-state" style="padding:20px;"><div>鏆傛棤鐣瀷鏁版嵁</div></div>'}
+  return html;
+}
+
+function renderLdStats(table){
+  var playerStats={},totalBombs=0,springs=0,antiSprings=0;
+  (table.sessions||[]).forEach(function(s){
+    if(s.game_type!=='landlord')return;
+    (s.rounds||[]).forEach(function(r){
+      totalBombs+=r.bomb_count||0;if(r.spring)springs++;if(r.anti_spring)antiSprings++;
+      Object.keys(r.amounts||{}).forEach(function(p){
+        if(!playerStats[p])playerStats[p]={net:0,rounds:0};
+        playerStats[p].net+=(r.amounts[p]||0);playerStats[p].rounds++;
+      });
+    });
+  });
+  var html='<div class="card"><div class="summary-row">';
+  Object.keys(playerStats).forEach(function(p){
+    var s=playerStats[p];
+    html+='<div class="summary-item"><div class="val '+(s.net>0?'amount-plus':s.net<0?'amount-minus':'amount-zero')+'">'+(s.net>0?'+':'')+s.net+'</div><div class="lbl">'+esc(p)+' ('+s.rounds+'灞€)</div></div>';
+  });
+  html+='</div></div>';
+  html+='<div class="card"><div class="card-title">鐗屽眬缁熻</div>';
+  html+='<div class="summary-row">';
+  html+='<div class="summary-item"><div class="val" style="color:var(--gold);">'+totalBombs+'</div><div class="lbl">鎬荤偢寮规暟</div></div>';
+  html+='<div class="summary-item"><div class="val" style="color:var(--green);">'+springs+'</div><div class="lbl">鏄ュぉ</div></div>';
+  html+='<div class="summary-item"><div class="val" style="color:var(--blue);">'+antiSprings+'</div><div class="lbl">鍙嶆槬澶?/div></div>';
+  html+='</div></div>';
+  return html;
+}
+
+// ==================== 鍒濆鍖?====================
+initNav();
+renderPage('tables');
+})();
 </script>
 </body>
 </html>
