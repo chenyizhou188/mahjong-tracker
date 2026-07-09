@@ -151,11 +151,23 @@ var myRoomId=localStorage.getItem('mj_room_id')||'';
 var myName=localStorage.getItem('mj_name')||'';
 var myRoom=null,pollTimer=null;
 var view='entry',isCreator=false,selectedWinner=null,showCode=false;
+var exitingRoom=false;
+
+function pushRoomState(){history.pushState({room:myRoomId},'',location.href)}
+function goEntry(){
+  exitingRoom=true;stopPoll();clearState();selectedWinner=null;myRoom=null;
+  history.replaceState({},'',location.pathname);view='entry';render();
+}
+
+window.addEventListener('popstate',function(e){
+  if(exitingRoom){exitingRoom=false;return}
+  if(myRoomId&&view!=='entry'){pushRoomState();toast('退出房间请点击退出按钮','t-err')}
+});
 
 function saveState(){localStorage.setItem('mj_room_id',myRoomId);localStorage.setItem('mj_name',myName)}
 function clearState(){myRoomId='';myName='';isCreator=false;showCode=false;localStorage.removeItem('mj_room_id');localStorage.removeItem('mj_name')}
 
-async function pollRoom(){if(!myRoomId)return;try{myRoom=await sbGet(myRoomId);if(!myRoom){clearState();view='entry';render()}else render()}catch(e){console.error(e)}}
+async function pollRoom(){if(!myRoomId)return;try{myRoom=await sbGet(myRoomId);if(!myRoom){goEntry()}else render()}catch(e){console.error(e)}}
 function startPoll(){stopPoll();pollTimer=setInterval(pollRoom,POLL_MS)}
 function stopPoll(){if(pollTimer){clearInterval(pollTimer);pollTimer=null}}
 
@@ -224,7 +236,7 @@ async function createRoom(showRoomCode){
     var code,exists=true;while(exists){code=genId().substr(0,4).toUpperCase();var r=await sbGetByCode(code);if(!r)exists=false}
     var id=genId();myRoomId=id;isCreator=true;showCode=showRoomCode;
     await sbPost({id:id,code:code,status:'waiting',players:[{name:myName,score:0,position:0,active:true,joined:new Date().toISOString()}],session_number:1,session_data:{transactions:[]},daily_stats:{},created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
-    saveState();view='standby';startPoll();render();
+    saveState();pushRoomState();view='standby';startPoll();render();
   }catch(e){toast('创建失败','t-err')}
 }
 
@@ -291,7 +303,7 @@ async function doJoinRoom(room){
   var active=room.players.filter(function(p){return p.active});
   if(active.length>=4){toast('房间已满','t-err');return}
   var dup=active.find(function(p){return p.name===myName});
-  if(dup){myRoomId=room.id;isCreator=false;saveState();history.replaceState({},'',location.pathname);view='standby';startPoll();render();pollRoom();return}
+  if(dup){myRoomId=room.id;isCreator=false;saveState();pushRoomState();history.replaceState({},'',location.pathname);view='standby';startPoll();render();pollRoom();return}
 
   var replaced=false;
   room.players=room.players.map(function(p,idx){if(!p.active&&!replaced){replaced=true;return{name:myName,score:0,position:idx,active:true,joined:new Date().toISOString()}}return p});
@@ -299,7 +311,7 @@ async function doJoinRoom(room){
   active=room.players.filter(function(p){return p.active});
   room.status=active.length===4?'playing':'waiting';
   await sbPatch(room.id,{players:room.players,status:room.status,updated_at:new Date().toISOString()});
-  myRoomId=room.id;isCreator=false;saveState();
+  myRoomId=room.id;isCreator=false;saveState();pushRoomState();
   history.replaceState({},'',location.pathname);
   view='standby';startPoll();render();pollRoom();
 }
@@ -359,12 +371,12 @@ function showQRModal(link){
 }
 
 async function leaveRoom(){
-  if(!myRoomId||!myName){clearState();view='entry';render();return}
+  if(!myRoomId||!myName){goEntry();return}
   try{
-    var room=await sbGet(myRoomId);if(!room){clearState();view='entry';render();return}
+    var room=await sbGet(myRoomId);if(!room){goEntry();return}
     room.players=room.players.map(function(p){if(p.name===myName)return{name:p.name,score:p.score,position:p.position,active:false,joined:p.joined};return p});
     await sbPatch(myRoomId,{players:room.players,status:'waiting',updated_at:new Date().toISOString()});
-    clearState();selectedWinner=null;view='entry';render();toast('已退出','');
+    goEntry();toast('已退出','');
   }catch(e){toast('失败','t-err')}
 }
 
@@ -448,7 +460,7 @@ async function init(){
   var urlCode=(new URLSearchParams(location.search)).get('code');
   if(urlCode&&!myName){isCreator=false;view='name';render();return}
   if(urlCode&&myName&&!myRoomId){await joinByCode(urlCode.toUpperCase());return}
-  if(myRoomId&&myName){view='standby';startPoll();render();try{await pollRoom()}catch(e){}return}
+  if(myRoomId&&myName){view='standby';startPoll();render();pushRoomState();try{await pollRoom()}catch(e){}return}
   view='entry';render();
 }
 init();
