@@ -11,76 +11,93 @@
 :root{--bg:#08080f;--green:#00e676;--green-glow:rgba(0,230,118,.35);--red:#ff3d3d;--red-glow:rgba(255,61,61,.35);--gold:#ffc107;--gold-glow:rgba(255,193,7,.3);--text:#e0e0e0;--dim:#555;--card-bg:rgba(255,255,255,.02);--border:#1a1a28;--radius:6px}
 body{font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;justify-content:center;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 #app{width:100%;max-width:420px;min-height:100dvh;display:flex;flex-direction:column;padding:20px 16px 32px}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;pointer-events:none;animation:tIn .25s,tOut .25s 1.6s forwards;background:rgba(255,255,255,.08);backdrop-filter:blur(20px);color:#fff;border:1px solid rgba(255,255,255,.1)}
+
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;pointer-events:none;animation:tIn .25s,tOut .25s 2s forwards;background:rgba(20,20,30,.95);backdrop-filter:blur(20px);color:#fff;border:1px solid rgba(255,255,255,.1)}
 @keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 @keyframes tOut{from{opacity:1}to{opacity:0;transform:translateX(-50%) translateY(-6px)}}
 .t-ok{border-color:rgba(0,230,118,.4);color:var(--green)}.t-err{border-color:rgba(255,61,61,.4);color:var(--red)}
 
-/* Entry */
-.entry-hero{text-align:center;padding:60px 0 40px}
-.entry-hero .tile{font-size:72px;line-height:1;margin-bottom:20px;filter:drop-shadow(0 0 32px var(--gold-glow))}
-.entry-hero h1{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:800;letter-spacing:.08em;color:var(--gold);text-shadow:0 0 40px var(--gold-glow);margin-bottom:8px}
-.entry-hero .sub{font-size:14px;color:var(--dim);font-weight:500;letter-spacing:.04em}
-.entry-actions{margin-top:32px;display:flex;flex-direction:column;gap:12px}
-.btn{width:100%;padding:15px;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;letter-spacing:.04em;text-transform:uppercase}
+.btn{width:100%;padding:15px;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;letter-spacing:.04em}
 .btn:active{transform:scale(.98)}
 .btn-primary{background:var(--gold);color:#0a0a0a;box-shadow:0 0 24px var(--gold-glow)}
 .btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--border)}
 .btn-ghost:active{background:rgba(255,255,255,.03)}
 .btn-danger{background:var(--red);color:#fff;box-shadow:0 0 20px var(--red-glow)}
 .btn-sm{padding:8px 16px;font-size:11px;width:auto;border-radius:4px;letter-spacing:.08em}
-.name-tag{text-align:center;margin-top:20px;font-size:12px;color:var(--dim)}
-.name-tag b{color:var(--text)}
+.btn-accent{background:rgba(255,193,7,.12);color:var(--gold);border:1px solid rgba(255,193,7,.3);box-shadow:0 0 12px rgba(255,193,7,.08)}
 
-/* Standby */
-.standby-header{text-align:center;padding:20px 0 24px}
-.qr-wrap{margin:0 auto 20px;width:180px;height:180px;background:#fff;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center}
-.qr-wrap img{width:100%;height:100%;border-radius:8px}
-.standby-header .prompt{font-size:18px;font-weight:800;color:var(--gold);letter-spacing:.04em;margin-top:8px}
-.standby-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.sb-slot{background:var(--card-bg);border:1px dashed var(--border);border-radius:12px;padding:24px 12px;text-align:center;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .3s}
-.sb-slot.filled{border-style:solid;border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
-.sb-slot.self{border-color:var(--gold);box-shadow:0 0 16px rgba(255,193,7,.1)}
-.sb-slot .avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;margin-bottom:10px;background:rgba(255,255,255,.06);color:var(--dim)}
-.sb-slot.filled .avatar{background:linear-gradient(135deg,rgba(255,193,7,.2),rgba(255,193,7,.05));color:var(--gold)}
-.sb-slot.self .avatar{background:var(--gold);color:#0a0a0a}
-.sb-slot .name{font-size:15px;font-weight:700;color:var(--dim)}
-.sb-slot.filled .name{color:var(--text)}
-.sb-slot .hint{font-size:12px;color:var(--dim);margin-top:2px}
+/* ===== ENTRY ===== */
+.entry-hero{text-align:center;padding:60px 0 40px}
+.entry-hero .tile{font-size:64px;line-height:1;margin-bottom:16px;filter:drop-shadow(0 0 28px var(--gold-glow))}
+.entry-hero h1{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:800;letter-spacing:.08em;color:var(--gold);text-shadow:0 0 40px var(--gold-glow);margin-bottom:6px}
+.entry-hero .sub{font-size:13px;color:var(--dim);font-weight:500;letter-spacing:.04em}
+.entry-actions{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn{flex:1}
 
-/* Name modal */
-.name-modal-o{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.name-modal{background:#0d0d1a;border:1px solid var(--border);border-radius:12px;width:90%;max-width:360px;padding:28px 22px;animation:pop .25s}
+/* ===== NAME MODAL ===== */
+.modal-o{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.nm{background:#0d0d1a;border:1px solid var(--border);border-radius:14px;width:90%;max-width:360px;padding:28px 22px;animation:pop .22s}
 @keyframes pop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.name-modal h3{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;margin-bottom:20px;text-align:center;letter-spacing:.06em;color:var(--gold)}
-.name-modal .inp{width:100%;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:18px;font-family:'Inter',sans-serif;outline:none;text-align:center;font-weight:600;transition:border-color .2s}
-.name-modal .inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,193,7,.08)}
-.name-modal .inp::placeholder{color:var(--dim);font-weight:400}
-.name-modal .actions{margin-top:20px;display:flex;gap:8px}
-.name-modal .actions .btn{flex:1}
+.nm h3{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;margin-bottom:18px;text-align:center;letter-spacing:.06em;color:var(--gold)}
+.nm .inp{width:100%;padding:13px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:18px;font-family:'Inter',sans-serif;outline:none;text-align:center;font-weight:600;transition:border-color .2s}
+.nm .inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,193,7,.08)}
+.nm .inp::placeholder{color:var(--dim);font-weight:400}
+.nm .actions{margin-top:18px;display:flex;gap:8px}
+.nm .actions .btn{flex:1}
 
-/* Scoreboard */
+/* ===== JOIN MODAL (scan/code) ===== */
+.sm{background:#0d0d1a;border:1px solid var(--border);border-radius:14px 14px 0 0;width:100%;max-width:420px;padding:28px 20px;animation:up .3s}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sm h3{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;margin-bottom:18px;text-align:center;letter-spacing:.04em;color:var(--gold)}
+.sm .or{text-align:center;font-size:12px;color:var(--dim);margin:16px 0;position:relative}
+.sm .or::before,.sm .or::after{content:'';position:absolute;top:50%;width:35%;height:1px;background:var(--border)}
+.sm .or::before{left:0}.sm .or::after{right:0}
+.sm .code-inp{width:100%;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:22px;font-family:'JetBrains Mono',monospace;outline:none;text-align:center;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:border-color .2s}
+.sm .code-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,193,7,.08)}
+.sm .code-inp::placeholder{color:var(--dim);font-weight:400;letter-spacing:.04em;font-size:16px}
+#scannerFile{display:none}
+
+/* ===== STANDBY ===== */
+.standby-header{text-align:center;padding:16px 0 20px}
+.qr-wrap{margin:0 auto 18px;width:180px;height:180px;background:#fff;border-radius:14px;padding:6px;display:flex;align-items:center;justify-content:center}
+.qr-wrap img{width:100%;height:100%;border-radius:10px}
+.code-badge{display:inline-block;padding:6px 20px;background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.25);border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;letter-spacing:.12em;color:var(--gold);margin-bottom:8px}
+.standby-header .prompt{font-size:16px;font-weight:800;color:var(--gold);letter-spacing:.04em;margin-top:6px}
+
+.standby-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.sb{background:var(--card-bg);border:1px dashed var(--border);border-radius:12px;padding:24px 12px;text-align:center;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .3s}
+.sb.filled{border-style:solid;border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
+.sb.self{border-color:var(--gold);box-shadow:0 0 16px rgba(255,193,7,.1)}
+.sb .avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;margin-bottom:8px;background:rgba(255,255,255,.06);color:var(--dim)}
+.sb.filled .avatar{background:linear-gradient(135deg,rgba(255,193,7,.2),rgba(255,193,7,.05));color:var(--gold)}
+.sb.self .avatar{background:var(--gold);color:#0a0a0a}
+.sb .name{font-size:15px;font-weight:700;color:var(--dim)}
+.sb.filled .name{color:var(--text)}
+.sb .hint{font-size:12px;color:var(--dim);margin-top:2px}
+
+/* ===== SCOREBOARD ===== */
 .room-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:4px;margin-bottom:8px}
 .room-header .left{display:flex;align-items:center;gap:10px}
 .pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--border);color:var(--dim)}
 .pill-live{color:var(--green);border-color:rgba(0,230,118,.3);box-shadow:0 0 8px var(--green-glow)}
 .scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
-.slot{background:var(--card-bg);padding:24px 14px 18px;text-align:center;cursor:pointer;transition:all .15s;position:relative;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.slot{background:var(--card-bg);padding:22px 14px 16px;text-align:center;cursor:pointer;transition:all .15s;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .slot:active{background:rgba(255,255,255,.04)}
 .slot.selected{background:rgba(255,193,7,.06);box-shadow:inset 0 0 0 1px var(--gold)}
-.slot .initials{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:6px;background:rgba(255,255,255,.04);color:var(--dim)}
+.slot .initials{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:6px;background:rgba(255,255,255,.04);color:var(--dim)}
 .slot.selected .initials{background:var(--gold);color:#0a0a0a}
 .slot .name{font-size:11px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.slot .score{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:800;line-height:1;letter-spacing:-.03em;transition:color .3s,text-shadow .3s}
+.slot .score{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:800;line-height:1;letter-spacing:-.03em}
 .slot .score.pos{color:var(--green);text-shadow:0 0 20px var(--green-glow)}
 .slot .score.neg{color:var(--red);text-shadow:0 0 20px var(--red-glow)}
 .ticker{margin:10px 0;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);max-height:100px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
 .ticker .txn{display:flex;align-items:center;gap:6px}.ticker .txn .who{color:var(--gold)}.ticker .txn .amt{color:var(--red);font-weight:700}
 .actions-bar{margin-top:12px;display:flex;gap:8px}.actions-bar .btn{flex:1}
-.guide{text-align:center;font-size:12px;color:var(--dim);font-weight:500;letter-spacing:.02em;padding:8px 0}
-.pay-bar{margin-top:12px;display:flex;gap:8px;align-items:center}
-.pay-bar input{flex:1;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid var(--gold);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);text-align:center;outline:none}
-.pay-bar input:focus{box-shadow:0 0 0 3px rgba(255,193,7,.1)}.pay-bar input::placeholder{color:var(--dim);font-weight:500}
+.guide{text-align:center;font-size:12px;color:var(--dim);font-weight:500;padding:8px 0}
+.pay-bar{margin-top:10px;display:flex;gap:8px;align-items:center}
+.pay-bar input{flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:1px solid var(--gold);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);text-align:center;outline:none}
+.pay-bar input:focus{box-shadow:0 0 0 3px rgba(255,193,7,.1)}
 .pay-bar .label{font-size:11px;color:var(--dim);font-weight:600;white-space:nowrap}
 .banner{margin-bottom:12px;padding:12px 16px;border-radius:8px;background:rgba(255,61,61,.06);border:1px solid rgba(255,61,61,.2);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600}
 .banner span{color:var(--red);text-transform:uppercase;letter-spacing:.04em}
@@ -93,25 +110,22 @@ body{font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei",sans-seri
 .stat-date{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px}
 .stat-date .total{font-size:11px;color:var(--dim);font-weight:500;margin-left:8px}
 .stat-line{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:15px}
-.stat-line .player{font-weight:600}
-.stat-line .val{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px}
+.stat-line .player{font-weight:600}.stat-line .val{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px}
 .stat-line .val.up{color:var(--green)}.stat-line .val.down{color:var(--red)}
-.empty-state{text-align:center;padding:60px 20px;color:var(--dim);font-size:14px;font-weight:500}
+.empty-state{text-align:center;padding:60px 20px;color:var(--dim);font-size:14px}
 
-/* Modal */
-.modal-o{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
-.modal{background:#0d0d1a;border:1px solid var(--border);border-radius:12px 12px 0 0;width:100%;max-width:420px;padding:28px 20px;animation:up .3s}
-@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal .qr-big{width:200px;height:200px;margin:0 auto 16px;background:#fff;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center}
-.modal .qr-big img{width:100%;height:100%;border-radius:8px}
-.modal h3{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;margin-bottom:6px;text-align:center;letter-spacing:.04em;color:var(--gold)}
-.modal .hint{text-align:center;font-size:13px;color:var(--dim);margin-bottom:12px}
+.qr-modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.qr-modal-inner{background:#0d0d1a;border:1px solid var(--border);border-radius:14px;padding:28px 22px;width:90%;max-width:340px;text-align:center;animation:pop .22s}
+.qr-modal-inner h3{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;margin-bottom:14px;letter-spacing:.04em;color:var(--gold)}
+.qr-modal-inner .qr-big{width:200px;height:200px;margin:0 auto 12px;background:#fff;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center}
+.qr-modal-inner .qr-big img{width:100%;height:100%;border-radius:8px}
+.qr-modal-inner .tip{font-size:13px;color:var(--dim);margin-bottom:10px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toasts"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
 (function(){
 var SB_URL='https://apueeywuobvgrekaxowa.supabase.co';
@@ -125,7 +139,7 @@ function fmtDate(d){var t=new Date(d);return t.getFullYear()+'-'+String(t.getMon
 function genId(){return Math.random().toString(36).substr(2,6)+Date.now().toString(36).substr(-4)}
 function esc(s){return(String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function toast(msg,cls){cls=cls||'';var d=el('div','toast '+cls,msg);$('toasts').appendChild(d);setTimeout(function(){d.remove()},2100)}
+function toast(msg,cls){cls=cls||'';var d=el('div','toast '+cls,msg);$('toasts').appendChild(d);setTimeout(function(){d.remove()},2400)}
 
 var headers={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
 async function sbGet(id){var r=await fetch(SB_URL+'/rest/v1/rooms?id=eq.'+encodeURIComponent(id),{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});if(!r.ok)throw new Error('GET '+r.status);var d=await r.json();return d[0]||null}
@@ -136,18 +150,19 @@ async function sbPatch(id,data){var r=await fetch(SB_URL+'/rest/v1/rooms?id=eq.'
 var myRoomId=localStorage.getItem('mj_room_id')||'';
 var myName=localStorage.getItem('mj_name')||'';
 var myRoom=null,pollTimer=null;
-var view='entry',isCreator=false,selectedWinner=null;
+var view='entry',isCreator=false,selectedWinner=null,showCode=false;
 
 function saveState(){localStorage.setItem('mj_room_id',myRoomId);localStorage.setItem('mj_name',myName)}
-function clearState(){myRoomId='';myName='';isCreator=false;localStorage.removeItem('mj_room_id');localStorage.removeItem('mj_name')}
+function clearState(){myRoomId='';myName='';isCreator=false;showCode=false;localStorage.removeItem('mj_room_id');localStorage.removeItem('mj_name')}
 
-async function pollRoom(){if(!myRoomId)return;try{myRoom=await sbGet(myRoomId);if(!myRoom){clearState();view='entry';render()}else{render()}}catch(e){console.error(e)}}
+async function pollRoom(){if(!myRoomId)return;try{myRoom=await sbGet(myRoomId);if(!myRoom){clearState();view='entry';render()}else render()}catch(e){console.error(e)}}
 function startPoll(){stopPoll();pollTimer=setInterval(pollRoom,POLL_MS)}
 function stopPoll(){if(pollTimer){clearInterval(pollTimer);pollTimer=null}}
 
 function render(){$('app').innerHTML='';
   if(view==='entry')renderEntry();
-  else if(view==='name-modal')renderNameModal();
+  else if(view==='name')renderNameModal();
+  else if(view==='join')renderJoinModal();
   else if(view==='standby')renderStandby();
   else if(view==='scoreboard')renderScoreboard();
   else if(view==='stats')renderStats();
@@ -155,37 +170,40 @@ function render(){$('app').innerHTML='';
 
 // ==================== ENTRY ====================
 function renderEntry(){
-  stopPoll();myRoom=null;selectedWinner=null;
+  stopPoll();myRoom=null;selectedWinner=null;showCode=false;
+
   var urlCode=(new URLSearchParams(location.search)).get('code');
-  if(urlCode&&!myName){isCreator=false;view='name-modal';render();return}
+  if(urlCode&&!myName){view='name';isCreator=false;render();return}
   if(urlCode&&myName&&!myRoomId){joinByCode(urlCode.toUpperCase());return}
   if(myRoomId&&myName){view='standby';startPoll();render();pollRoom();return}
 
   var h='<div class="entry-hero"><div class="tile">🀄</div><h1>雀神记账本</h1><div class="sub">扫码即玩 · 四人成群 · 自动记账</div></div>';
-  h+='<div class="entry-actions"><button class="btn btn-primary" id="bcreate">创建房间</button>';
-  h+='<button class="btn btn-ghost" id="bjoin">扫码加入</button>';
-  if(myName)h+='<div class="name-tag">当前名字：<b>'+esc(myName)+'</b></div>';
+  h+='<div class="entry-actions">';
+  h+='<button class="btn btn-primary" id="bcreate">创建房间</button>';
+  h+='<button class="btn btn-accent" id="bqr">生成二维码</button>';
+  h+='<div class="btn-row"><button class="btn btn-ghost" id="bjoin">扫码加入</button></div>';
+  if(myName)h+='<div style="text-align:center;margin-top:20px;font-size:12px;color:var(--dim)">当前名字：<b style="color:var(--text)">'+esc(myName)+'</b></div>';
   h+='</div>';
   $('app').innerHTML=h;
 
-  $('bcreate').addEventListener('click',function(){if(!myName){isCreator=true;view='name-modal';render();return}createRoom()});
-  $('bjoin').addEventListener('click',function(){if(!myName){isCreator=false;view='name-modal';render();return}showScanHelp()});
-}
-
-function showScanHelp(){
-  var link=location.origin+location.pathname,h='<div class="modal-o"><div class="modal">';
-  h+='<h3>扫码加入</h3><p class="hint">请让房主展示二维码，用微信扫一扫即可加入</p>';
-  h+='<button class="btn btn-ghost btn-sm" id="bcp" style="margin:12px auto 0;display:flex;">复制我的邀请链接</button>';
-  h+='</div></div>';
-  var o=el('div');o.innerHTML=h;var modal=o.firstElementChild;$('app').appendChild(modal);
-  modal.addEventListener('click',function(e){if(e.target===modal)modal.remove()});
-  modal.querySelector('#bcp').addEventListener('click',function(){navigator.clipboard.writeText(link).then(function(){toast('已复制')}).catch(function(){})});
+  $('bcreate').addEventListener('click',function(){
+    if(!myName){view='name';isCreator=true;showCode=true;render();return}
+    createRoom(true);
+  });
+  $('bqr').addEventListener('click',function(){
+    if(!myName){view='name';isCreator=true;showCode=false;render();return}
+    createRoom(false);
+  });
+  $('bjoin').addEventListener('click',function(){
+    if(!myName){view='name';isCreator=false;render();return}
+    view='join';render();
+  });
 }
 
 // ==================== NAME MODAL ====================
 function renderNameModal(){
-  stopPoll();myRoom=null;
-  var h='<div class="name-modal-o"><div class="name-modal"><h3>你的名字</h3>';
+  stopPoll();
+  var h='<div class="modal-o"><div class="nm"><h3>你的名字</h3>';
   h+='<input class="inp" id="nminp" placeholder="输入名字" value="'+esc(myName||'')+'" autocomplete="off" autofocus>';
   h+='<div class="actions"><button class="btn btn-ghost" id="nmcancel">取消</button><button class="btn btn-primary" id="nmok">确认</button></div></div></div>';
   $('app').innerHTML=h;
@@ -195,41 +213,95 @@ function renderNameModal(){
     myName=n;saveState();
     var urlCode=(new URLSearchParams(location.search)).get('code');
     if(urlCode){await joinByCode(urlCode.toUpperCase());return}
-    if(isCreator){await createRoom()}else{view='entry';render()}
+    if(isCreator){await createRoom(showCode)}else{view='entry';render()}
   });
   $('nminp').addEventListener('keydown',function(e){if(e.key==='Enter')$('nmok').click()});
   setTimeout(function(){var inp=$('nminp');if(inp)inp.focus()},100);
 }
 
-async function createRoom(){
+async function createRoom(showRoomCode){
   try{
     var code,exists=true;while(exists){code=genId().substr(0,4).toUpperCase();var r=await sbGetByCode(code);if(!r)exists=false}
-    var id=genId();myRoomId=id;isCreator=true;
+    var id=genId();myRoomId=id;isCreator=true;showCode=showRoomCode;
     await sbPost({id:id,code:code,status:'waiting',players:[{name:myName,score:0,position:0,active:true,joined:new Date().toISOString()}],session_number:1,session_data:{transactions:[]},daily_stats:{},created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
     saveState();view='standby';startPoll();render();
   }catch(e){toast('创建失败','t-err')}
 }
 
+// ==================== JOIN MODAL ====================
+function renderJoinModal(){
+  stopPoll();myRoom=null;
+  var h='<div class="modal-o" style="align-items:flex-end" id="jmo">';
+  h+='<div class="sm"><h3>加入房间</h3>';
+  h+='<input class="code-inp" id="codeinp" placeholder="输入 4 位房间码" maxlength="4" autocomplete="off" autofocus>';
+  h+='<button class="btn btn-primary" id="bcodejoin" style="margin-top:12px">通过房间码加入</button>';
+  h+='<div class="or">或</div>';
+  h+='<input type="file" id="scannerFile" accept="image/*" capture="environment">';
+  h+='<button class="btn btn-accent" id="bscan">扫描二维码</button>';
+  h+='<button class="btn btn-ghost btn-sm" id="jbcancel" style="margin-top:12px">返回</button>';
+  h+='</div></div>';
+  $('app').innerHTML=h;
+
+  $('jbcancel').addEventListener('click',function(){view='entry';render()});
+  $('#jmo').addEventListener('click',function(e){if(e.target===this){view='entry';render()}});
+
+  $('bcodejoin').addEventListener('click',async function(){
+    var c=$('codeinp').value.trim().toUpperCase();
+    if(c.length!==4){toast('输入4位房间码','t-err');return}
+    var room=await sbGetByCode(c);
+    if(!room){toast('房间不存在','t-err');return}
+    doJoinRoom(room);
+  });
+
+  $('bscan').addEventListener('click',function(){
+    $('#scannerFile').click();
+  });
+
+  $('#scannerFile').addEventListener('change',async function(e){
+    var file=e.target.files[0];if(!file)return;
+    toast('识别中…','');
+    try{
+      var bmp=await createImageBitmap(file);
+      var canvas=document.createElement('canvas');
+      canvas.width=bmp.width;canvas.height=bmp.height;
+      var ctx=canvas.getContext('2d');ctx.drawImage(bmp,0,0);
+      var imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+      var code;
+      if(typeof jsQR !== 'undefined'){code=jsQR(imgData.data,imgData.width,imgData.height)}
+      else{var detector=new BarcodeDetector({formats:['qr_code']});var res=await detector.detect(canvas);if(res.length>0)code={data:res[0].rawValue}}
+      if(!code){toast('未识别到二维码','t-err');return}
+      var u=new URL(code.data);var uuid=u.searchParams.get('code');
+      if(!uuid){toast('无效房间链接','t-err');return}
+      var room=await sbGetByCode(uuid.toUpperCase());
+      if(!room){toast('房间不存在','t-err');return}
+      doJoinRoom(room);
+    }catch(err){toast('扫描失败','t-err');console.error(err)}
+    this.value='';
+  });
+}
+
 async function joinByCode(code){
   try{
     var room=await sbGetByCode(code);if(!room){toast('房间不存在','t-err');view='entry';render();return}
-    var active=room.players.filter(function(p){return p.active});
-    if(active.length>=4){toast('房间已满','t-err');view='entry';render();return}
-
-    // Check if already in this room by name
-    var dup=active.find(function(p){return p.name===myName});
-    if(dup){myRoomId=room.id;isCreator=false;saveState();history.replaceState({},'',location.pathname);view='standby';startPoll();render();pollRoom();return}
-
-    var replaced=false;
-    room.players=room.players.map(function(p,idx){if(!p.active&&!replaced){replaced=true;return{name:myName,score:0,position:idx,active:true,joined:new Date().toISOString()}}return p});
-    if(!replaced)room.players.push({name:myName,score:0,position:room.players.length,active:true,joined:new Date().toISOString()});
-    active=room.players.filter(function(p){return p.active});
-    room.status=active.length===4?'playing':'waiting';
-    await sbPatch(room.id,{players:room.players,status:room.status,updated_at:new Date().toISOString()});
-    myRoomId=room.id;isCreator=false;saveState();
-    history.replaceState({},'',location.pathname);
-    view='standby';startPoll();render();pollRoom();
+    doJoinRoom(room);
   }catch(e){toast('加入失败','t-err');view='entry';render()}
+}
+
+async function doJoinRoom(room){
+  var active=room.players.filter(function(p){return p.active});
+  if(active.length>=4){toast('房间已满','t-err');return}
+  var dup=active.find(function(p){return p.name===myName});
+  if(dup){myRoomId=room.id;isCreator=false;saveState();history.replaceState({},'',location.pathname);view='standby';startPoll();render();pollRoom();return}
+
+  var replaced=false;
+  room.players=room.players.map(function(p,idx){if(!p.active&&!replaced){replaced=true;return{name:myName,score:0,position:idx,active:true,joined:new Date().toISOString()}}return p});
+  if(!replaced)room.players.push({name:myName,score:0,position:room.players.length,active:true,joined:new Date().toISOString()});
+  active=room.players.filter(function(p){return p.active});
+  room.status=active.length===4?'playing':'waiting';
+  await sbPatch(room.id,{players:room.players,status:room.status,updated_at:new Date().toISOString()});
+  myRoomId=room.id;isCreator=false;saveState();
+  history.replaceState({},'',location.pathname);
+  view='standby';startPoll();render();pollRoom();
 }
 
 // ==================== STANDBY ====================
@@ -241,26 +313,30 @@ function renderStandby(){
 
   if(room.status==='playing'){view='scoreboard';render();return}
 
-  var h='';
-  if(isCreator){
-    h+='<div class="standby-header"><div class="qr-wrap"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(link)+'" alt="QR"></div>';
-    h+='<div class="prompt">'+(!full?'还差 <b>'+(4-active.length)+'</b> 人加入':'已满 4 人，开始记账！')+'</div></div>';
+  var h='<div class="standby-header">';
+  if(showCode){
+    h+='<div class="code-badge">'+esc(room.code)+'</div>';
+    h+='<div class="prompt">'+(!full?'把房间码发给朋友，还差 <b>'+(4-active.length)+'</b> 人':'已满 4 人，开始记账！')+'</div>';
   }else{
-    h+='<div class="standby-header"><div class="prompt">'+(!full?'还差 <b>'+(4-active.length)+'</b> 人加入':'已满 4 人，开始记账！')+'</div></div>';
+    h+='<div class="qr-wrap"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(link)+'" alt="QR"></div>';
+    h+='<div class="prompt">'+(!full?'扫码即加入，还差 <b>'+(4-active.length)+'</b> 人':'已满 4 人，开始记账！')+'</div>';
   }
+  h+='</div>';
 
   h+='<div class="standby-grid">';
   for(var i=0;i<4;i++){
     var p=room.players.find(function(x){return x.position===i});
     if(p&&p.active){
       var isMe=p.name===myName;
-      h+='<div class="sb-slot filled'+(isMe?' self':'')+'"><div class="avatar">'+esc(p.name[0])+'</div><div class="name">'+esc(p.name)+(isMe?' (你)':'')+'</div></div>';
-    }else{h+='<div class="sb-slot"><div class="hint">等待加入</div></div>'}
+      h+='<div class="sb filled'+(isMe?' self':'')+'"><div class="avatar">'+esc(p.name[0])+'</div><div class="name">'+esc(p.name)+(isMe?' (你)':'')+'</div></div>';
+    }else{h+='<div class="sb"><div class="hint">等待加入</div></div>'}
   }
   h+='</div>';
 
   if(full)h+='<button class="btn btn-primary" id="bstart">开始记账</button>';
-  h+='<div class="bottom-nav"><button class="btn btn-ghost btn-sm" id="bshare">分享二维码</button><button class="btn btn-ghost btn-sm" style="color:var(--red)" id="bleave">退出房间</button></div>';
+  h+='<div class="bottom-nav">';
+  if(!showCode)h+='<button class="btn btn-ghost btn-sm" id="bshareqr">查看大二维码</button>';
+  h+='<button class="btn btn-ghost btn-sm" style="color:var(--red)" id="bleave">退出房间</button></div>';
   $('app').innerHTML=h;
 
   var bs=$('bstart');
@@ -269,15 +345,17 @@ function renderStandby(){
     if(act.length!==4){toast('需要4人','t-err');return}
     try{await sbPatch(myRoomId,{status:'playing',updated_at:new Date().toISOString()});pollRoom()}catch(e){toast('失败','t-err')}
   });
-  $('bshare').addEventListener('click',function(){showQRModal(link)});
+
+  var bsq=$('bshareqr');
+  if(bsq)bsq.addEventListener('click',function(){showQRModal(link)});
   $('bleave').addEventListener('click',leaveRoom);
 }
 
 function showQRModal(link){
-  var h='<div class="modal-o"><div class="modal"><h3>扫码加入房间</h3><div class="qr-big"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(link)+'"></div><p class="hint">微信扫一扫即可加入</p><button class="btn btn-ghost btn-sm" id="bcpm" style="margin:0 auto;display:flex;">复制链接</button></div></div>';
-  var o=el('div');o.innerHTML=h;var modal=o.firstElementChild;$('app').appendChild(modal);
-  modal.addEventListener('click',function(e){if(e.target===modal)modal.remove()});
-  modal.querySelector('#bcpm').addEventListener('click',function(){navigator.clipboard.writeText(link).then(function(){toast('已复制','t-ok')}).catch(function(){toast(link,'t-err')})});
+  var h='<div class="qr-modal"><div class="qr-modal-inner"><h3>扫码加入房间</h3><div class="qr-big"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(link)+'"></div><p class="tip">微信扫一扫即可加入</p><button class="btn btn-ghost btn-sm" id="qrcp" style="margin:0 auto;display:flex;">复制链接</button></div></div>';
+  var o=el('div');o.innerHTML=h;var m=o.firstElementChild;$('app').appendChild(m);
+  m.addEventListener('click',function(e){if(e.target===m)m.remove()});
+  m.querySelector('#qrcp').addEventListener('click',function(){navigator.clipboard.writeText(link).then(function(){toast('已复制','t-ok')}).catch(function(){toast(link,'t-err')})});
 }
 
 async function leaveRoom(){
@@ -300,14 +378,14 @@ function renderScoreboard(){
   h+='<button class="btn btn-ghost btn-sm" id="bend">结束</button></div>';
 
   var bankrupts=active.filter(function(p){return(p.score||0)<=-2000});
-  if(bankrupts.length>0)h+='<div class="banner"><span>'+esc(bankrupts[0].name)+' &le; -2000，自动开新局</span><button class="btn btn-danger btn-sm" id="bnr">手动新局</button></div>';
+  if(bankrupts.length>0)h+='<div class="banner"><span>'+esc(bankrupts[0].name)+' &le; -2000</span><button class="btn btn-danger btn-sm" id="bnr">手动新局</button></div>';
 
   h+='<div class="scoreboard">';
   for(var i=0;i<4;i++){
     var p=room.players.find(function(x){return x.position===i});
     if(p&&p.active){
-      var s=p.score||0,c=(p.name===selectedWinner?'selected':'')+(p.name===myName?' slot-me':'');
-      h+='<div class="slot '+c+'" data-player="'+esc(p.name)+'"><div class="initials">'+esc(p.name[0])+'</div><div class="name">'+esc(p.name)+(p.name===myName?' (你)':'')+'</div><div class="score '+(s>0?'pos':s<0?'neg':'')+'">'+fmt(s)+'</div>';
+      var s=p.score||0;
+      h+='<div class="slot'+(p.name===selectedWinner?' selected':'')+'" data-player="'+esc(p.name)+'"><div class="initials">'+esc(p.name[0])+'</div><div class="name">'+esc(p.name)+(p.name===myName?' (你)':'')+'</div><div class="score '+(s>0?'pos':s<0?'neg':'')+'">'+fmt(s)+'</div>';
       if(selectedWinner&&p.name!==selectedWinner)h+='<div class="pay-bar"><input type="number" class="pay-input" data-to="'+esc(p.name)+'" placeholder="0" min="0" step="1" inputmode="numeric"><span class="label">&rarr; '+esc(selectedWinner)+'</span></div>';
       h+='</div>';
     }else{h+='<div class="slot" style="opacity:.15;cursor:default"><div class="name">空位</div><div class="score">&mdash;</div></div>'}
@@ -368,7 +446,7 @@ function renderStats(){
 // ==================== INIT ====================
 async function init(){
   var urlCode=(new URLSearchParams(location.search)).get('code');
-  if(urlCode&&!myName){isCreator=false;view='name-modal';render();return}
+  if(urlCode&&!myName){isCreator=false;view='name';render();return}
   if(urlCode&&myName&&!myRoomId){await joinByCode(urlCode.toUpperCase());return}
   if(myRoomId&&myName){view='standby';startPoll();render();try{await pollRoom()}catch(e){}return}
   view='entry';render();
