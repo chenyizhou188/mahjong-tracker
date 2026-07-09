@@ -309,8 +309,7 @@ async function doJoinRoom(room){
   room.players=room.players.map(function(p,idx){if(!p.active&&!replaced){replaced=true;return{name:myName,score:0,position:idx,active:true,joined:new Date().toISOString()}}return p});
   if(!replaced)room.players.push({name:myName,score:0,position:room.players.length,active:true,joined:new Date().toISOString()});
   active=room.players.filter(function(p){return p.active});
-  room.status=active.length===4?'playing':'waiting';
-  await sbPatch(room.id,{players:room.players,status:room.status,updated_at:new Date().toISOString()});
+  await sbPatch(room.id,{players:room.players,status:'waiting',updated_at:new Date().toISOString()});
   myRoomId=room.id;isCreator=false;saveState();pushRoomState();
   history.replaceState({},'',location.pathname);
   view='standby';startPoll();render();pollRoom();
@@ -345,16 +344,13 @@ function renderStandby(){
   }
   h+='</div>';
 
-  if(full)h+='<button class="btn btn-primary" id="bstart">开始记账</button>';
+  h+='<button class="btn btn-primary" id="bstart">开始记账</button>';
   h+='<div class="bottom-nav">';
   if(!showCode)h+='<button class="btn btn-ghost btn-sm" id="bshareqr">查看大二维码</button>';
   h+='<button class="btn btn-ghost btn-sm" style="color:var(--red)" id="bleave">退出房间</button></div>';
   $('app').innerHTML=h;
 
-  var bs=$('bstart');
-  if(bs)bs.addEventListener('click',async function(){
-    var act=room.players.filter(function(p){return p.active});
-    if(act.length!==4){toast('需要4人','t-err');return}
+  $('bstart').addEventListener('click',async function(){
     try{await sbPatch(myRoomId,{status:'playing',updated_at:new Date().toISOString()});pollRoom()}catch(e){toast('失败','t-err')}
   });
 
